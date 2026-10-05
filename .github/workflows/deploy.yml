@@ -7,13 +7,23 @@ on:
 
 jobs:
   web-deploy:
-    name: Sync files to cPanel
+    name: Build & Sync files to cPanel
     runs-on: ubuntu-latest
     steps:
       - name: Fetch repository files
         uses: actions/checkout@v4
 
-      - name: Upload files via FTP
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies & Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Upload compiled files via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
@@ -22,4 +32,5 @@ jobs:
           port: 21
           protocol: ftp
           security: loose
+          local-dir: ./dist/        # Change to ./build/ if using standard Create React App
           server-dir: public_html/
