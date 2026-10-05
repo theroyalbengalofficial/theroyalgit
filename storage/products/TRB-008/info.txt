@@ -1,0 +1,15 @@
+========================================================
+THE ROYAL BENGAL - PRODUCT SPECIFICATION ARCHIVE
+========================================================
+Product Name:    Holiday Hunt Pre WInter Cilantro
+Style Code / SKU: TRB-008
+Category:        holiday
+Price:           2300 Tk.
+Stock:           43 units
+Available Sizes: M, L, XL
+Primary Color:   Cilantro
+Fabric:          75% polyester 20% cotton 5% elastane
+Updated At:      2026-10-01T04:13:41+00:00
+Description:
+Crafted for distinguished command and tailored precision.
+========================================================

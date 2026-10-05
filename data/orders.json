@@ -1,0 +1,596 @@
+[
+    {
+        "orderId": "TRB-373078",
+        "orderNumber": "TRB-373078",
+        "customerId": "cust-01672332231",
+        "customerName": "Sajid",
+        "phone": "01672332231",
+        "email": "sajidmahamud5462@gmail.com",
+        "address": "136\n464 Ulon Rd",
+        "district": "Dhaka",
+        "deliveryMethod": "inside-dhaka",
+        "paymentMethod": "cod",
+        "authProvider": "direct",
+        "items": [
+            {
+                "id": "cart-1790950175172-jv5j",
+                "product": {
+                    "name": "Boardroom Hunt Bottle Green",
+                    "subtitle": "Executive Tailored Series",
+                    "styleCode": "TRB-001",
+                    "category": "boardroom",
+                    "price": 2800,
+                    "currency": "Tk.",
+                    "stock": 16,
+                    "sizeStock": {
+                        "M": 3,
+                        "L": 7,
+                        "XL": 6
+                    },
+                    "description": "Crafted for distinguished command and tailored precision.",
+                    "fabric": "100% cotton",
+                    "color": "Bottle Green",
+                    "colorOptions": [
+                        {
+                            "name": "Bottle Green",
+                            "hex": "#F25C05"
+                        }
+                    ],
+                    "image": "/assets/Boardroom Hunt Bottle Green - 2800.webp",
+                    "sizes": [
+                        "M",
+                        "L",
+                        "XL"
+                    ],
+                    "gallery": [
+                        "/assets/Boardroom Hunt Bottle Green - 2800.webp"
+                    ],
+                    "measurements": [
+                        {
+                            "size": "S",
+                            "length": 27.5,
+                            "chest": 38,
+                            "sleeveLength": 8
+                        },
+                        {
+                            "size": "M",
+                            "length": 28,
+                            "chest": 41,
+                            "sleeveLength": 8.5
+                        },
+                        {
+                            "size": "L",
+                            "length": 29.5,
+                            "chest": 42,
+                            "sleeveLength": 9
+                        },
+                        {
+                            "size": "XL",
+                            "length": 30,
+                            "chest": 44,
+                            "sleeveLength": 9.5
+                        },
+                        {
+                            "size": "2XL",
+                            "length": 31,
+                            "chest": 46,
+                            "sleeveLength": 10
+                        },
+                        {
+                            "size": "3XL",
+                            "length": 32,
+                            "chest": 48,
+                            "sleeveLength": 10.5
+                        }
+                    ],
+                    "id": "trb-muozqipz-nrmq"
+                },
+                "selectedSize": "M",
+                "selectedColor": "Bottle Green",
+                "quantity": 1
+            }
+        ],
+        "subtotal": 2800,
+        "discount": 0,
+        "vat": 0,
+        "shipping": 100,
+        "total": 2900,
+        "status": "Cancelled",
+        "createdAt": "2026-10-02T14:09:53.971Z"
+    },
+    {
+        "orderId": "TRB-735841",
+        "orderNumber": "TRB-735841",
+        "customerId": "cust-01672332231",
+        "customerName": "sajid mahamud",
+        "phone": "01672332231",
+        "email": "sajidmahamud5462@gmail.com",
+        "address": "136\n464 Ulon Rd",
+        "district": "Dhaka",
+        "deliveryMethod": "inside-dhaka",
+        "paymentMethod": "cod",
+        "authProvider": "direct",
+        "items": [
+            {
+                "id": "cart-1790950041504-0xj3",
+                "product": {
+                    "name": "Boardroom Hunt Bottle Green",
+                    "subtitle": "Executive Tailored Series",
+                    "styleCode": "TRB-001",
+                    "category": "boardroom",
+                    "price": 2800,
+                    "currency": "Tk.",
+                    "stock": 18,
+                    "sizeStock": {
+                        "M": 5,
+                        "L": 7,
+                        "XL": 6
+                    },
+                    "description": "Crafted for distinguished command and tailored precision.",
+                    "fabric": "100% cotton",
+                    "color": "Bottle Green",
+                    "colorOptions": [
+                        {
+                            "name": "Bottle Green",
+                            "hex": "#F25C05"
+                        }
+                    ],
+                    "image": "/assets/Boardroom Hunt Bottle Green - 2800.webp",
+                    "sizes": [
+                        "M",
+                        "L",
+                        "XL"
+                    ],
+                    "gallery": [
+                        "/assets/Boardroom Hunt Bottle Green - 2800.webp"
+                    ],
+                    "measurements": [
+                        {
+                            "size": "S",
+                            "length": 27.5,
+                            "chest": 38,
+                            "sleeveLength": 8
+                        },
+                        {
+                            "size": "M",
+                            "length": 28,
+                            "chest": 41,
+                            "sleeveLength": 8.5
+                        },
+                        {
+                            "size": "L",
+                            "length": 29.5,
+                            "chest": 42,
+                            "sleeveLength": 9
+                        },
+                        {
+                            "size": "XL",
+                            "length": 30,
+                            "chest": 44,
+                            "sleeveLength": 9.5
+                        },
+                        {
+                            "size": "2XL",
+                            "length": 31,
+                            "chest": 46,
+                            "sleeveLength": 10
+                        },
+                        {
+                            "size": "3XL",
+                            "length": 32,
+                            "chest": 48,
+                            "sleeveLength": 10.5
+                        }
+                    ],
+                    "id": "trb-muozqipz-nrmq"
+                },
+                "selectedSize": "M",
+                "selectedColor": "Bottle Green",
+                "quantity": 1
+            }
+        ],
+        "subtotal": 2800,
+        "discount": 0,
+        "vat": 0,
+        "shipping": 100,
+        "total": 2900,
+        "status": "Cancelled",
+        "createdAt": "2026-10-02T14:07:46.371Z"
+    },
+    {
+        "orderId": "TRB-733595",
+        "orderNumber": "TRB-733595",
+        "customerId": "cust-01670000000",
+        "customerName": "Test",
+        "phone": "01670000000",
+        "email": "test@test.com",
+        "address": "Test Lorem Ipsum",
+        "district": "Dhaka",
+        "deliveryMethod": "inside-dhaka",
+        "paymentMethod": "cod",
+        "authProvider": "direct",
+        "items": [
+            {
+                "id": "cart-1790857106456-xdn9",
+                "product": {
+                    "name": "Boardroom Hunt Cotton Cloud",
+                    "subtitle": "Executive Tailored Series",
+                    "styleCode": "TRB-003",
+                    "category": "boardroom",
+                    "price": 2800,
+                    "currency": "Tk.",
+                    "stock": 25,
+                    "sizeStock": {
+                        "M": 10,
+                        "L": 10,
+                        "XL": 5
+                    },
+                    "description": "Crafted for distinguished command and tailored precision.",
+                    "fabric": "100% Cotton",
+                    "color": "Cotton Cloud",
+                    "colorOptions": [
+                        {
+                            "name": "Cotton Cloud",
+                            "hex": "#F25C05"
+                        }
+                    ],
+                    "image": "/assets/Boardroom Hunt Cotton Cloud - 2800.webp",
+                    "sizes": [
+                        "M",
+                        "L",
+                        "XL"
+                    ],
+                    "gallery": [
+                        "/assets/Boardroom Hunt Cotton Cloud - 2800.webp"
+                    ],
+                    "measurements": [
+                        {
+                            "size": "S",
+                            "length": 27.5,
+                            "chest": 38,
+                            "sleeveLength": 8
+                        },
+                        {
+                            "size": "M",
+                            "length": 28,
+                            "chest": 41,
+                            "sleeveLength": 8.5
+                        },
+                        {
+                            "size": "L",
+                            "length": 29.5,
+                            "chest": 42,
+                            "sleeveLength": 9
+                        },
+                        {
+                            "size": "XL",
+                            "length": 30,
+                            "chest": 44,
+                            "sleeveLength": 9.5
+                        },
+                        {
+                            "size": "2XL",
+                            "length": 31,
+                            "chest": 46,
+                            "sleeveLength": 10
+                        },
+                        {
+                            "size": "3XL",
+                            "length": 32,
+                            "chest": 48,
+                            "sleeveLength": 10.5
+                        }
+                    ],
+                    "id": "trb-muozx1fa-sozm"
+                },
+                "selectedSize": "M",
+                "selectedColor": "Cotton Cloud",
+                "quantity": 1
+            }
+        ],
+        "subtotal": 2800,
+        "discount": 0,
+        "vat": 0,
+        "shipping": 100,
+        "total": 2900,
+        "status": "Cancelled",
+        "createdAt": "2026-10-01T12:19:11.521Z"
+    },
+    {
+        "orderId": "TRB-426850",
+        "orderNumber": "TRB-426850",
+        "customerId": "cust-01672332231",
+        "customerName": "sajid",
+        "phone": "01672332231",
+        "email": "",
+        "address": "120 Ulon Rd",
+        "district": "Dhaka",
+        "deliveryMethod": "inside-dhaka",
+        "paymentMethod": "cod",
+        "authProvider": "direct",
+        "items": [
+            {
+                "id": "cart-1790713994746-5f4b",
+                "product": {
+                    "name": "Daily Office Ready",
+                    "subtitle": "Executive Tailored Series",
+                    "styleCode": "TRB-008",
+                    "category": "boardroom",
+                    "price": 2000,
+                    "currency": "Tk.",
+                    "stock": 25,
+                    "sizeStock": {
+                        "M": 10,
+                        "L": 10,
+                        "XL": 5
+                    },
+                    "description": "Crafted for distinguished command and tailored precision.",
+                    "fabric": "100% Ultra-Fine Combed Cotton",
+                    "color": "Light Green Stripe",
+                    "colorOptions": [
+                        {
+                            "name": "Light Green Stripe",
+                            "hex": "#F25C05"
+                        }
+                    ],
+                    "image": "/assets/Light Green Stripe.jpg",
+                    "sizes": [
+                        "M",
+                        "L",
+                        "XL"
+                    ],
+                    "gallery": [
+                        "/assets/Light Green Stripe.jpg"
+                    ],
+                    "measurements": [
+                        {
+                            "size": "S",
+                            "length": 27.5,
+                            "chest": 38,
+                            "sleeveLength": 8
+                        },
+                        {
+                            "size": "M",
+                            "length": 28,
+                            "chest": 41,
+                            "sleeveLength": 8.5
+                        },
+                        {
+                            "size": "L",
+                            "length": 29.5,
+                            "chest": 42,
+                            "sleeveLength": 9
+                        },
+                        {
+                            "size": "XL",
+                            "length": 30,
+                            "chest": 44,
+                            "sleeveLength": 9.5
+                        },
+                        {
+                            "size": "2XL",
+                            "length": 31,
+                            "chest": 46,
+                            "sleeveLength": 10
+                        },
+                        {
+                            "size": "3XL",
+                            "length": 32,
+                            "chest": 48,
+                            "sleeveLength": 10.5
+                        }
+                    ],
+                    "id": "trb-muhio4a1-s214"
+                },
+                "selectedSize": "M",
+                "selectedColor": "Light Green Stripe",
+                "quantity": 1
+            }
+        ],
+        "subtotal": 2000,
+        "discount": 0,
+        "vat": 0,
+        "shipping": 100,
+        "total": 2100,
+        "status": "Cancelled",
+        "createdAt": "2026-09-29T20:34:03.189Z"
+    },
+    {
+        "orderId": "TRB-513546",
+        "orderNumber": "TRB-513546",
+        "customerId": "cust-01670557780",
+        "customerName": "Rabeya Symun Chowdhury",
+        "phone": "01670557780",
+        "email": "abir557780@gmail.com",
+        "address": "saudia city",
+        "district": "Dhaka",
+        "deliveryMethod": "inside-dhaka",
+        "paymentMethod": "cod",
+        "authProvider": "direct",
+        "items": [
+            {
+                "id": "cart-1790678798645-pnxj",
+                "product": {
+                    "name": "Daily Office Ready",
+                    "subtitle": "Executive Tailored Series",
+                    "styleCode": "TRB-008",
+                    "category": "boardroom",
+                    "price": 2000,
+                    "currency": "Tk.",
+                    "stock": 25,
+                    "sizeStock": {
+                        "M": 10,
+                        "L": 10,
+                        "XL": 5
+                    },
+                    "description": "Crafted for distinguished command and tailored precision.",
+                    "fabric": "100% Ultra-Fine Combed Cotton",
+                    "color": "Light Green Stripe",
+                    "colorOptions": [
+                        {
+                            "name": "Light Green Stripe",
+                            "hex": "#F25C05"
+                        }
+                    ],
+                    "image": "/assets/Light Green Stripe.jpg",
+                    "sizes": [
+                        "M",
+                        "L",
+                        "XL"
+                    ],
+                    "gallery": [
+                        "/assets/Light Green Stripe.jpg"
+                    ],
+                    "measurements": [
+                        {
+                            "size": "S",
+                            "length": 27.5,
+                            "chest": 38,
+                            "sleeveLength": 8
+                        },
+                        {
+                            "size": "M",
+                            "length": 28,
+                            "chest": 41,
+                            "sleeveLength": 8.5
+                        },
+                        {
+                            "size": "L",
+                            "length": 29.5,
+                            "chest": 42,
+                            "sleeveLength": 9
+                        },
+                        {
+                            "size": "XL",
+                            "length": 30,
+                            "chest": 44,
+                            "sleeveLength": 9.5
+                        },
+                        {
+                            "size": "2XL",
+                            "length": 31,
+                            "chest": 46,
+                            "sleeveLength": 10
+                        },
+                        {
+                            "size": "3XL",
+                            "length": 32,
+                            "chest": 48,
+                            "sleeveLength": 10.5
+                        }
+                    ],
+                    "id": "trb-muhio4a1-s214"
+                },
+                "selectedSize": "M",
+                "selectedColor": "Light Green Stripe",
+                "quantity": 1
+            }
+        ],
+        "subtotal": 2000,
+        "discount": 0,
+        "vat": 0,
+        "shipping": 100,
+        "total": 2100,
+        "status": "Cancelled",
+        "createdAt": "2026-09-29T10:46:55.685Z"
+    },
+    {
+        "orderId": "TRB-625764",
+        "orderNumber": "TRB-625764",
+        "customerId": "cust-01670557780",
+        "customerName": "Shihanur Rahman",
+        "phone": "01670557780",
+        "email": "abir557780@gmail.com",
+        "address": "Road 21, House 17, Nikunja 2, Khikhet",
+        "district": "Dhaka",
+        "deliveryMethod": "inside-dhaka",
+        "paymentMethod": "cod",
+        "authProvider": "direct",
+        "items": [
+            {
+                "id": "cart-1790657599957-c4fi",
+                "product": {
+                    "name": "Boardroom Ready",
+                    "subtitle": "Executive Tailored Series",
+                    "styleCode": "TRB-001",
+                    "category": "boardroom",
+                    "price": 2700,
+                    "currency": "Tk.",
+                    "stock": 25,
+                    "sizeStock": {
+                        "M": 10,
+                        "L": 10,
+                        "XL": 5
+                    },
+                    "description": "Crafted for distinguished command and tailored precision.",
+                    "fabric": "100% Ultra-Fine Combed Cotton",
+                    "color": "Bottle Green",
+                    "colorOptions": [
+                        {
+                            "name": "Bottle Green",
+                            "hex": "#F25C05"
+                        }
+                    ],
+                    "image": "/assets/Bottle Green.JPG",
+                    "sizes": [
+                        "M",
+                        "L",
+                        "XL"
+                    ],
+                    "gallery": [
+                        "/assets/Bottle Green.JPG"
+                    ],
+                    "measurements": [
+                        {
+                            "size": "S",
+                            "length": 27.5,
+                            "chest": 38,
+                            "sleeveLength": 8
+                        },
+                        {
+                            "size": "M",
+                            "length": 28,
+                            "chest": 41,
+                            "sleeveLength": 8.5
+                        },
+                        {
+                            "size": "L",
+                            "length": 29.5,
+                            "chest": 42,
+                            "sleeveLength": 9
+                        },
+                        {
+                            "size": "XL",
+                            "length": 30,
+                            "chest": 44,
+                            "sleeveLength": 9.5
+                        },
+                        {
+                            "size": "2XL",
+                            "length": 31,
+                            "chest": 46,
+                            "sleeveLength": 10
+                        },
+                        {
+                            "size": "3XL",
+                            "length": 32,
+                            "chest": 48,
+                            "sleeveLength": 10.5
+                        }
+                    ],
+                    "id": "trb-muhie7uj-hu6n"
+                },
+                "selectedSize": "M",
+                "selectedColor": "Bottle Green",
+                "quantity": 1
+            }
+        ],
+        "subtotal": 2700,
+        "discount": 0,
+        "vat": 0,
+        "shipping": 100,
+        "total": 2800,
+        "status": "Cancelled",
+        "createdAt": "2026-09-29T04:53:46.694Z"
+    }
+]

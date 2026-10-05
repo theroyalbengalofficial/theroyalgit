@@ -1,0 +1,25 @@
+{
+  "id": "test-101",
+  "name": "Sundarbans Royal Shirt",
+  "styleCode": "TRB-101",
+  "category": "all",
+  "price": 1850,
+  "stock": 20,
+  "sizes": [
+    "M",
+    "L",
+    "XL"
+  ],
+  "color": "Forest Olive",
+  "colorOptions": [
+    {
+      "name": "Forest Olive",
+      "hex": "#4A5D4E"
+    }
+  ],
+  "gallery": [
+    "/assets/images/model_shirt_1788893616421.jpg"
+  ],
+  "image": "/assets/images/model_shirt_1788893616421.jpg",
+  "description": "Signature organic cotton shirt"
+}

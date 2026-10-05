@@ -1,0 +1,25 @@
+========================================================
+THE ROYAL BENGAL - OFFICIAL CUSTOMER ORDER INVOICE
+========================================================
+Order Number:     TRB-513546
+Date & Time:      2026-09-29T10:46:55.685Z
+Order Status:     Cancelled
+Payment Method:   COD (Cash on Delivery)
+--------------------------------------------------------
+CUSTOMER DETAILS:
+Customer Name:    Rabeya Symun Chowdhury
+Phone Number:     01670557780
+Email Address:    abir557780@gmail.com
+Delivery Method:  inside-dhaka
+District / Zone:  Dhaka
+Delivery Address: saudia city
+--------------------------------------------------------
+ORDERED ITEMS:
+  1. Daily Office Ready (Style Code: TRB-008)
+     Size: M | Color: Light Green Stripe | Qty: 1 x Tk. 2,000 = Tk. 2,000
+--------------------------------------------------------
+Subtotal:         Tk. 2,000
+Discount:         Tk. 0
+Delivery Fee:     Tk. 100
+TOTAL PAYABLE:    Tk. 2,100
+========================================================

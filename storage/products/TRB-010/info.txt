@@ -1,0 +1,15 @@
+========================================================
+THE ROYAL BENGAL - PRODUCT SPECIFICATION ARCHIVE
+========================================================
+Product Name:    24x7 Band Collar Greyscale
+Style Code / SKU: TRB-010
+Category:        24x7
+Price:           2400 Tk.
+Stock:           25 units
+Available Sizes: M, L, XL
+Primary Color:   Grayscale
+Fabric:          100% Cotton
+Updated At:      2026-10-01T04:22:43+00:00
+Description:
+Crafted for distinguished command and tailored precision.
+========================================================

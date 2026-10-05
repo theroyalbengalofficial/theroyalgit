@@ -1,0 +1,15 @@
+========================================================
+THE ROYAL BENGAL - PRODUCT SPECIFICATION ARCHIVE
+========================================================
+Product Name:    Daily Hunt Office Ready Clouds
+Style Code / SKU: TRB-006
+Category:        daily
+Price:           2000 Tk.
+Stock:           3 units
+Available Sizes: L, XL
+Primary Color:   Clouds
+Fabric:          100% Cotton
+Updated At:      2026-10-01T04:00:31+00:00
+Description:
+Crafted for distinguished command and tailored precision.
+========================================================

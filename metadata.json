@@ -1,0 +1,6 @@
+{
+  "name": "The Royal Bengal",
+  "description": "Made For The Hunt",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

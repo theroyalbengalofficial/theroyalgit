@@ -1,0 +1,25 @@
+========================================================
+THE ROYAL BENGAL - OFFICIAL CUSTOMER ORDER INVOICE
+========================================================
+Order Number:     TRB-426850
+Date & Time:      2026-09-29T20:34:03.189Z
+Order Status:     Pending
+Payment Method:   COD (Cash on Delivery)
+--------------------------------------------------------
+CUSTOMER DETAILS:
+Customer Name:    sajid
+Phone Number:     01672332231
+Email Address:    
+Delivery Method:  inside-dhaka
+District / Zone:  Dhaka
+Delivery Address: 120 Ulon Rd
+--------------------------------------------------------
+ORDERED ITEMS:
+  1. Daily Office Ready (Style Code: TRB-008)
+     Size: M | Color: Light Green Stripe | Qty: 1 x Tk. 2,000 = Tk. 2,000
+--------------------------------------------------------
+Subtotal:         Tk. 2,000
+Discount:         Tk. 0
+Delivery Fee:     Tk. 100
+TOTAL PAYABLE:    Tk. 2,100
+========================================================

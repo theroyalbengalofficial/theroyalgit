@@ -1,0 +1,15 @@
+========================================================
+THE ROYAL BENGAL - PRODUCT SPECIFICATION ARCHIVE
+========================================================
+Product Name:    Boardroom Hunt Cotton Cloud
+Style Code / SKU: TRB-003
+Category:        boardroom
+Price:           2800 Tk.
+Stock:           25 units
+Available Sizes: M, L, XL
+Primary Color:   Cotton Cloud
+Fabric:          100% Cotton
+Updated At:      2026-10-01T03:49:55+00:00
+Description:
+Crafted for distinguished command and tailored precision.
+========================================================

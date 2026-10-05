@@ -1,0 +1,26 @@
+========================================================
+THE ROYAL BENGAL - OFFICIAL CUSTOMER ORDER INVOICE
+========================================================
+Order Number:     TRB-735841
+Date & Time:      2026-10-02T14:07:46.371Z
+Order Status:     Pending
+Payment Method:   COD (Cash on Delivery)
+--------------------------------------------------------
+CUSTOMER DETAILS:
+Customer Name:    sajid mahamud
+Phone Number:     01672332231
+Email Address:    sajidmahamud5462@gmail.com
+Delivery Method:  inside-dhaka
+District / Zone:  Dhaka
+Delivery Address: 136
+464 Ulon Rd
+--------------------------------------------------------
+ORDERED ITEMS:
+  1. Boardroom Hunt Bottle Green (Style Code: TRB-001)
+     Size: M | Color: Bottle Green | Qty: 1 x Tk. 2,800 = Tk. 2,800
+--------------------------------------------------------
+Subtotal:         Tk. 2,800
+Discount:         Tk. 0
+Delivery Fee:     Tk. 100
+TOTAL PAYABLE:    Tk. 2,900
+========================================================

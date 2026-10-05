@@ -1,0 +1,15 @@
+========================================================
+THE ROYAL BENGAL - PRODUCT SPECIFICATION ARCHIVE
+========================================================
+Product Name:    Boardroom Hunt Maroon
+Style Code / SKU: TRB-005
+Category:        boardroom
+Price:           2800 Tk.
+Stock:           7 units
+Available Sizes: M, L, XL
+Primary Color:   Maroon
+Fabric:          100% Cotton
+Updated At:      2026-10-01T03:54:38+00:00
+Description:
+Crafted for distinguished command and tailored precision.
+========================================================

@@ -1,0 +1,70 @@
+{
+    "name": "Daily Hunt Office Ready Clouds",
+    "subtitle": "Executive Tailored Series",
+    "styleCode": "TRB-006",
+    "category": "daily",
+    "price": 2000,
+    "currency": "Tk.",
+    "stock": 3,
+    "sizeStock": {
+        "M": 0,
+        "L": 2,
+        "XL": 1
+    },
+    "description": "Crafted for distinguished command and tailored precision.",
+    "fabric": "100% Cotton",
+    "color": "Clouds",
+    "colorOptions": [
+        {
+            "name": "Clouds",
+            "hex": "#F25C05"
+        }
+    ],
+    "image": "/assets/Daily Hunt Office Ready Clouds - 2000.webp",
+    "sizes": [
+        "L",
+        "XL"
+    ],
+    "gallery": [
+        "/assets/Daily Hunt Office Ready Clouds - 2000.webp"
+    ],
+    "measurements": [
+        {
+            "size": "S",
+            "length": 27.5,
+            "chest": 38,
+            "sleeveLength": 8
+        },
+        {
+            "size": "M",
+            "length": 28,
+            "chest": 41,
+            "sleeveLength": 8.5
+        },
+        {
+            "size": "L",
+            "length": 29.5,
+            "chest": 42,
+            "sleeveLength": 9
+        },
+        {
+            "size": "XL",
+            "length": 30,
+            "chest": 44,
+            "sleeveLength": 9.5
+        },
+        {
+            "size": "2XL",
+            "length": 31,
+            "chest": 46,
+            "sleeveLength": 10
+        },
+        {
+            "size": "3XL",
+            "length": 32,
+            "chest": 48,
+            "sleeveLength": 10.5
+        }
+    ],
+    "id": "trb-mup0ao6y-nb9p"
+}

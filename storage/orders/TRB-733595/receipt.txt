@@ -1,0 +1,25 @@
+========================================================
+THE ROYAL BENGAL - OFFICIAL CUSTOMER ORDER INVOICE
+========================================================
+Order Number:     TRB-733595
+Date & Time:      2026-10-01T12:19:11.521Z
+Order Status:     Pending
+Payment Method:   COD (Cash on Delivery)
+--------------------------------------------------------
+CUSTOMER DETAILS:
+Customer Name:    Test
+Phone Number:     01670000000
+Email Address:    test@test.com
+Delivery Method:  inside-dhaka
+District / Zone:  Dhaka
+Delivery Address: Test Lorem Ipsum
+--------------------------------------------------------
+ORDERED ITEMS:
+  1. Boardroom Hunt Cotton Cloud (Style Code: TRB-003)
+     Size: M | Color: Cotton Cloud | Qty: 1 x Tk. 2,800 = Tk. 2,800
+--------------------------------------------------------
+Subtotal:         Tk. 2,800
+Discount:         Tk. 0
+Delivery Fee:     Tk. 100
+TOTAL PAYABLE:    Tk. 2,900
+========================================================

@@ -1,0 +1,44 @@
+[
+    {
+        "id": "cust-01670000000",
+        "name": "Test",
+        "phone": "01670000000",
+        "email": "test@test.com",
+        "address": "Test Lorem Ipsum",
+        "district": "Dhaka",
+        "deliveryZone": "inside-dhaka",
+        "provider": "direct",
+        "totalOrders": 9,
+        "totalSpent": 26100,
+        "lastActive": "2026-10-02T08:20:36+00:00",
+        "createdAt": "2026-10-01T12:19:11+00:00"
+    },
+    {
+        "id": "cust-01672332231",
+        "name": "Sajid",
+        "phone": "01672332231",
+        "email": "",
+        "address": "136\n464 Ulon Rd",
+        "district": "Dhaka",
+        "deliveryZone": "inside-dhaka",
+        "provider": "direct",
+        "totalOrders": 45,
+        "totalSpent": 107300,
+        "lastActive": "2026-10-04T22:28:10+00:00",
+        "createdAt": "2026-10-01T06:41:18+00:00"
+    },
+    {
+        "id": "cust-01670557780",
+        "name": "Shihanur Rahman",
+        "phone": "01670557780",
+        "email": "abir557780@gmail.com",
+        "address": "Road 21, House 17, Nikunja 2, Khikhet",
+        "district": "Dhaka",
+        "deliveryZone": "inside-dhaka",
+        "provider": "direct",
+        "totalOrders": 85,
+        "totalSpent": 207200,
+        "lastActive": "2026-10-02T08:20:42+00:00",
+        "createdAt": "2026-10-01T05:08:10+00:00"
+    }
+]

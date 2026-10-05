@@ -1,0 +1,25 @@
+========================================================
+THE ROYAL BENGAL - OFFICIAL CUSTOMER ORDER INVOICE
+========================================================
+Order Number:     TRB-625764
+Date & Time:      2026-09-29T04:53:46.694Z
+Order Status:     Completed
+Payment Method:   COD (Cash on Delivery)
+--------------------------------------------------------
+CUSTOMER DETAILS:
+Customer Name:    Shihanur Rahman
+Phone Number:     01670557780
+Email Address:    abir557780@gmail.com
+Delivery Method:  inside-dhaka
+District / Zone:  Dhaka
+Delivery Address: Road 21, House 17, Nikunja 2, Khikhet
+--------------------------------------------------------
+ORDERED ITEMS:
+  1. Boardroom Ready (Style Code: TRB-001)
+     Size: M | Color: Bottle Green | Qty: 1 x Tk. 2,700 = Tk. 2,700
+--------------------------------------------------------
+Subtotal:         Tk. 2,700
+Discount:         Tk. 0
+Delivery Fee:     Tk. 100
+TOTAL PAYABLE:    Tk. 2,800
+========================================================

@@ -1,0 +1,71 @@
+{
+    "name": "Boardroom Hunt Maroon",
+    "subtitle": "Executive Tailored Series",
+    "styleCode": "TRB-005",
+    "category": "boardroom",
+    "price": 2800,
+    "currency": "Tk.",
+    "stock": 7,
+    "sizeStock": {
+        "M": 4,
+        "L": 2,
+        "XL": 1
+    },
+    "description": "Crafted for distinguished command and tailored precision.",
+    "fabric": "100% Cotton",
+    "color": "Maroon",
+    "colorOptions": [
+        {
+            "name": "Maroon",
+            "hex": "#F25C05"
+        }
+    ],
+    "image": "/assets/Boardroom Hunt Maroon - 2800.webp",
+    "sizes": [
+        "M",
+        "L",
+        "XL"
+    ],
+    "gallery": [
+        "/assets/Boardroom Hunt Maroon - 2800.webp"
+    ],
+    "measurements": [
+        {
+            "size": "S",
+            "length": 27.5,
+            "chest": 38,
+            "sleeveLength": 8
+        },
+        {
+            "size": "M",
+            "length": 28,
+            "chest": 41,
+            "sleeveLength": 8.5
+        },
+        {
+            "size": "L",
+            "length": 29.5,
+            "chest": 42,
+            "sleeveLength": 9
+        },
+        {
+            "size": "XL",
+            "length": 30,
+            "chest": 44,
+            "sleeveLength": 9.5
+        },
+        {
+            "size": "2XL",
+            "length": 31,
+            "chest": 46,
+            "sleeveLength": 10
+        },
+        {
+            "size": "3XL",
+            "length": 32,
+            "chest": 48,
+            "sleeveLength": 10.5
+        }
+    ],
+    "id": "trb-mup033aw-qb3w"
+}

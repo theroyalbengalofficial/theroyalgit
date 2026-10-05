@@ -1,0 +1,15 @@
+========================================================
+THE ROYAL BENGAL - PRODUCT SPECIFICATION ARCHIVE
+========================================================
+Product Name:    Holiday Hunt Pre WInter Coffee
+Style Code / SKU: TRB-009
+Category:        holiday
+Price:           2300 Tk.
+Stock:           6 units
+Available Sizes: M, L, XL
+Primary Color:   Coffee
+Fabric:          100% Cotton
+Updated At:      2026-10-01T04:15:11+00:00
+Description:
+Crafted for distinguished command and tailored precision.
+========================================================

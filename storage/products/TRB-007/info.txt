@@ -1,0 +1,15 @@
+========================================================
+THE ROYAL BENGAL - PRODUCT SPECIFICATION ARCHIVE
+========================================================
+Product Name:    Daily Hunt Office Ready Olive
+Style Code / SKU: TRB-007
+Category:        daily
+Price:           2000 Tk.
+Stock:           17 units
+Available Sizes: M, L, XL
+Primary Color:   Olive
+Fabric:          100% Cotton
+Updated At:      2026-10-01T04:10:10+00:00
+Description:
+Crafted for distinguished command and tailored precision.
+========================================================

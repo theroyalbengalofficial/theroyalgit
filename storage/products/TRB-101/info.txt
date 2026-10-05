@@ -1,0 +1,16 @@
+========================================================
+THE ROYAL BENGAL - PRODUCT SPECIFICATION ARCHIVE
+========================================================
+Product Name:    Sundarbans Royal Shirt
+Style Code / SKU: TRB-101
+Category:        all
+Price:           1850 Tk.
+Stock:           20 units
+Available Sizes: M, L, XL
+Primary Color:   Forest Olive
+Fabric:          N/A
+Created / Updated: 2026-09-25T11:32:06.893Z
+--------------------------------------------------------
+Description:
+Signature organic cotton shirt
+========================================================

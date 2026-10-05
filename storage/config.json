@@ -1,0 +1,8 @@
+{
+    "enabled": true,
+    "serverType": "php_webhook",
+    "serverUrl": "theroyalbengalsp",
+    "authToken": "k8}Ms(mk44EE+9Y-",
+    "remoteBasePath": "storage/products",
+    "autoSyncOnCreate": true
+}
