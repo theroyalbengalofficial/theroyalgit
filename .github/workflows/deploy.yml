@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies & Build
         run: |
-          npm ci
+          npm install
           npm run build
 
       - name: Upload compiled files via FTP
@@ -32,5 +32,5 @@ jobs:
           port: 21
           protocol: ftp
           security: loose
-          local-dir: ./dist/        # Change to ./build/ if using standard Create React App
+          local-dir: ./dist/        # Change to ./build/ if your framework produces a build/ folder
           server-dir: public_html/
