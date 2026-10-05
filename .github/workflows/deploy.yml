@@ -3,7 +3,7 @@ name: Deploy Website to cPanel
 on:
   push:
     branches:
-      - main  # Set this to 'master' if your default branch is named master
+      - main  # Change to 'master' if your main branch is called master
 
 jobs:
   web-deploy:
@@ -20,4 +20,6 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: 21
+          protocol: ftp
+          security: loose
           server-dir: public_html/
