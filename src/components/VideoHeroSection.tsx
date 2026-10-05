@@ -137,7 +137,7 @@ export const VideoHeroSection: React.FC<VideoHeroSectionProps> = ({ onScrollToHe
           muted={isMuted}
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
           onTimeUpdate={handleTimeUpdate}
           onError={() => setVideoError(true)}
           className="w-full h-full object-cover object-center cursor-pointer select-none"
