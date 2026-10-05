@@ -32,5 +32,6 @@ jobs:
           port: 21
           protocol: ftp
           security: loose
-          local-dir: ./dist/        # Change to ./build/ if your framework produces a build/ folder
+          local-dir: ./dist/                  # Change to ./build/ if using Create React App
           server-dir: public_html/
+          dangerous-clean-slate: true         # Forces full re-upload of all files
