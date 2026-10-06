@@ -29,7 +29,6 @@ export default defineConfig(() => {
     server: {
       hmr: false,
       watch: null,
-      ws: false,
     },
   };
 });

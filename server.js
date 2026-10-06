@@ -1001,8 +1001,7 @@ Guidelines:
     const vite = await createViteServer({
       server: {
         middlewareMode: true,
-        hmr: false,
-        ws: false
+        hmr: false
       },
       appType: "spa"
     });
