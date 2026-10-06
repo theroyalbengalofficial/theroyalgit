@@ -13,6 +13,7 @@ import ExchangeView from './ExchangeView';
 import CartDrawer from './CartDrawer';
 import GatewaySettingsModal from './GatewaySettingsModal';
 import { CustomerAuthModal } from './CustomerAuthModal';
+import { AIChatbot } from './AIChatbot';
 
 import { storeService } from '../services/storeService';
 import { Product, CartItem, ActivePage, HuntCategory, PaymentGatewayKeys, OrderDetails } from '../types';
@@ -305,6 +306,9 @@ export const Storefront: React.FC = () => {
 
       {/* Customer Gmail & Facebook Login Modal */}
       <CustomerAuthModal />
+
+      {/* Floating AI Concierge Chatbot (Bottom-Right) */}
+      <AIChatbot />
 
       {/* Global Toast Notification */}
       {toastMessage && (

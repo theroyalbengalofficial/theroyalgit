@@ -1,11 +1,13 @@
-// server.ts
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
-var __filename = fileURLToPath(import.meta.url);
-var __dirname = path.dirname(__filename);
+import dotenv from "dotenv";
+import { GoogleGenAI } from "@google/genai";
+dotenv.config();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 async function startServer() {
   const app = express();
   const PORT = Number(process.env.PORT) || 3e3;
@@ -14,18 +16,40 @@ async function startServer() {
   const DATA_DIR = path.resolve(__dirname, "data");
   const STORAGE_DIR = path.resolve(__dirname, "storage");
   const PRODUCTS_STORAGE_DIR = path.join(STORAGE_DIR, "products");
-  const PRODUCTS_FILE = path.join(DATA_DIR, "products.json");
-  const ORDERS_FILE = path.join(DATA_DIR, "orders.json");
-  const CUSTOMERS_FILE = path.join(DATA_DIR, "customers.json");
+  const ORDERS_STORAGE_DIR = path.join(STORAGE_DIR, "orders");
+  const PRODUCTS_FILE = fs.existsSync(path.join(STORAGE_DIR, "products.json")) ? path.join(STORAGE_DIR, "products.json") : path.join(DATA_DIR, "products.json");
+  const ORDERS_FILE = fs.existsSync(path.join(STORAGE_DIR, "orders.json")) ? path.join(STORAGE_DIR, "orders.json") : path.join(DATA_DIR, "orders.json");
+  const CUSTOMERS_FILE = fs.existsSync(path.join(STORAGE_DIR, "customers.json")) ? path.join(STORAGE_DIR, "customers.json") : path.join(DATA_DIR, "customers.json");
   const SOCIAL_FILE = path.join(DATA_DIR, "social.json");
   const STORAGE_CONFIG_FILE = path.join(DATA_DIR, "server_storage_config.json");
   const AUTH_CONFIG_FILE = path.join(DATA_DIR, "auth_config.json");
-  [DATA_DIR, STORAGE_DIR, PRODUCTS_STORAGE_DIR].forEach((dir) => {
+  [DATA_DIR, STORAGE_DIR, PRODUCTS_STORAGE_DIR, ORDERS_STORAGE_DIR].forEach((dir) => {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
   });
-  app.use("/storage", express.static(STORAGE_DIR));
+  app.use("/storage", express.static(STORAGE_DIR, {
+    maxAge: "7d",
+    setHeaders: (res, filePath) => {
+      if (filePath.match(/\.(webp|jpg|jpeg|png|gif|mp4|webm)$/i)) {
+        res.setHeader("Cache-Control", "public, max-age=604800, immutable");
+      }
+    }
+  }));
+  const PUBLIC_DIR = path.resolve(__dirname, "public");
+  if (fs.existsSync(PUBLIC_DIR)) {
+    app.use(express.static(PUBLIC_DIR, {
+      maxAge: "7d",
+      setHeaders: (res, filePath) => {
+        if (filePath.match(/\.(mp4|webm)$/i)) {
+          res.setHeader("Cache-Control", "public, max-age=604800");
+          res.setHeader("Accept-Ranges", "bytes");
+        } else if (filePath.match(/\.(webp|jpg|jpeg|png|svg|ico)$/i)) {
+          res.setHeader("Cache-Control", "public, max-age=604800, immutable");
+        }
+      }
+    }));
+  }
   const readJson = (filePath, fallback) => {
     try {
       if (fs.existsSync(filePath)) {
@@ -40,6 +64,16 @@ async function startServer() {
   const writeJson = (filePath, data) => {
     try {
       fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+      if (filePath.includes("products.json")) {
+        const mirrorPath = filePath.includes("storage") ? path.join(DATA_DIR, "products.json") : path.join(STORAGE_DIR, "products.json");
+        fs.writeFileSync(mirrorPath, JSON.stringify(data, null, 2), "utf-8");
+      } else if (filePath.includes("orders.json")) {
+        const mirrorPath = filePath.includes("storage") ? path.join(DATA_DIR, "orders.json") : path.join(STORAGE_DIR, "orders.json");
+        fs.writeFileSync(mirrorPath, JSON.stringify(data, null, 2), "utf-8");
+      } else if (filePath.includes("customers.json")) {
+        const mirrorPath = filePath.includes("storage") ? path.join(DATA_DIR, "customers.json") : path.join(STORAGE_DIR, "customers.json");
+        fs.writeFileSync(mirrorPath, JSON.stringify(data, null, 2), "utf-8");
+      }
     } catch (err) {
       console.error(`Error writing ${filePath}:`, err);
     }
@@ -156,6 +190,113 @@ async function startServer() {
       };
     } catch (err) {
       console.error("[Storage] Error creating product folder:", err);
+      return { success: false, error: err.message };
+    }
+  };
+  const saveOrderToFolder = async (order) => {
+    try {
+      const orderNum = order.orderId || order.orderNumber || `TRB-${Date.now()}`;
+      const safeFolder = orderNum.toString().replace(/[^a-zA-Z0-9_\-\.]/g, "_");
+      const orderDir = path.join(ORDERS_STORAGE_DIR, safeFolder);
+      if (!fs.existsSync(orderDir)) {
+        fs.mkdirSync(orderDir, { recursive: true });
+      }
+      const createdFiles = [];
+      const jsonPath = path.join(orderDir, "order.json");
+      fs.writeFileSync(jsonPath, JSON.stringify(order, null, 2), "utf-8");
+      createdFiles.push("order.json");
+      const items = Array.isArray(order.items) ? order.items : [];
+      const itemsText = items.map((it, idx) => {
+        const pName = it.product?.name || it.name || "Product";
+        const pCode = it.product?.styleCode || it.styleCode || "N/A";
+        const pSize = it.selectedSize || it.size || "Standard";
+        const pColor = it.selectedColor || it.color || "Standard";
+        const pQty = it.quantity || it.qty || 1;
+        const pPrice = it.price || it.product?.price || 0;
+        const sub = pQty * pPrice;
+        return `  ${idx + 1}. ${pName} (Style Code: ${pCode})
+     Size: ${pSize} | Color: ${pColor} | Qty: ${pQty} x Tk. ${Number(pPrice).toLocaleString()} = Tk. ${Number(sub).toLocaleString()}`;
+      }).join("\n");
+      const invoiceText = [
+        "========================================================",
+        "THE ROYAL BENGAL - OFFICIAL CUSTOMER ORDER INVOICE",
+        "========================================================",
+        `Order Number:     ${orderNum}`,
+        `Date & Time:      ${order.createdAt || (/* @__PURE__ */ new Date()).toISOString()}`,
+        `Order Status:     ${order.status || "Pending"}`,
+        `Payment Method:   ${(order.paymentMethod || "cod").toUpperCase()} (Cash on Delivery)`,
+        "--------------------------------------------------------",
+        "CUSTOMER DETAILS:",
+        `Customer Name:    ${order.customerName || "N/A"}`,
+        `Phone Number:     ${order.phone || "N/A"}`,
+        `Email Address:    ${order.email || "N/A"}`,
+        `Delivery Method:  ${order.deliveryMethod || "inside-dhaka"}`,
+        `District / Zone:  ${order.district || "Dhaka"}`,
+        `Delivery Address: ${order.address || "N/A"}`,
+        "--------------------------------------------------------",
+        "ORDERED ITEMS:",
+        itemsText || "  No items detailed",
+        "--------------------------------------------------------",
+        `Subtotal:         Tk. ${Number(order.subtotal || 0).toLocaleString()}`,
+        `Discount:         Tk. ${Number(order.discount || 0).toLocaleString()}`,
+        `Delivery Fee:     Tk. ${Number(order.shipping || 0).toLocaleString()}`,
+        `TOTAL PAYABLE:    Tk. ${Number(order.total || 0).toLocaleString()}`,
+        "========================================================"
+      ].join("\n");
+      fs.writeFileSync(path.join(orderDir, "receipt.txt"), invoiceText, "utf-8");
+      createdFiles.push("receipt.txt");
+      let remoteSyncResult = { configured: false };
+      const config = getStorageConfig();
+      if (config.enabled && config.serverUrl) {
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 8e3);
+          const remoteUrl = config.serverUrl.includes("?") ? `${config.serverUrl}&action=save_order` : `${config.serverUrl}?action=save_order`;
+          const headers = {
+            "Content-Type": "application/json"
+          };
+          if (config.authToken) {
+            headers["Authorization"] = `Bearer ${config.authToken}`;
+            headers["X-API-Key"] = config.authToken;
+          }
+          const response = await fetch(remoteUrl, {
+            method: "POST",
+            headers,
+            body: JSON.stringify({
+              action: "save_order",
+              order,
+              timestamp: (/* @__PURE__ */ new Date()).toISOString()
+            }),
+            signal: controller.signal
+          });
+          clearTimeout(timeout);
+          const remoteData = await response.json().catch(() => ({}));
+          console.log("[Order] Remote server sync response:", response.status, remoteData);
+          remoteSyncResult = {
+            configured: true,
+            status: response.ok ? "success" : "error",
+            statusCode: response.status,
+            remoteUrl: config.serverUrl,
+            response: remoteData
+          };
+        } catch (remoteErr) {
+          console.warn("[Order] Remote purchased server sync error:", remoteErr.message);
+          remoteSyncResult = {
+            configured: true,
+            status: "failed",
+            error: remoteErr.message
+          };
+        }
+      }
+      return {
+        success: true,
+        folder: safeFolder,
+        folderPath: `storage/orders/${safeFolder}`,
+        files: createdFiles,
+        remoteSync: remoteSyncResult
+      };
+    } catch (err) {
+      console.error("[Storage] Error creating order folder:", err);
       return { success: false, error: err.message };
     }
   };
@@ -311,9 +452,9 @@ async function startServer() {
       res.status(500).json({ success: false, error: err.message });
     }
   });
-  app.get("/api/storage/folders", (req, res) => {
+  app.get("/api/storage/folders", async (req, res) => {
     try {
-      const results = [];
+      const folderMap = /* @__PURE__ */ new Map();
       if (fs.existsSync(PRODUCTS_STORAGE_DIR)) {
         const entries = fs.readdirSync(PRODUCTS_STORAGE_DIR);
         for (const entry of entries) {
@@ -331,7 +472,7 @@ async function startServer() {
               } catch (e) {
               }
             }
-            results.push({
+            folderMap.set(entry, {
               name: entry,
               path: `/storage/products/${entry}`,
               files: files.map((file) => {
@@ -357,7 +498,42 @@ async function startServer() {
           }
         }
       }
-      res.json({ success: true, count: results.length, folders: results });
+      const config = getStorageConfig();
+      if (config.enabled && config.serverUrl) {
+        try {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 3500);
+          const remoteUrl = config.serverUrl.includes("?") ? `${config.serverUrl}&action=folders` : `${config.serverUrl}?action=folders`;
+          const headers = { "Content-Type": "application/json" };
+          if (config.authToken) {
+            headers["Authorization"] = `Bearer ${config.authToken}`;
+            headers["X-API-Key"] = config.authToken;
+          }
+          const resp = await fetch(remoteUrl, { headers, signal: controller.signal });
+          clearTimeout(timeout);
+          if (resp.ok) {
+            const rData = await resp.json().catch(() => ({}));
+            if (Array.isArray(rData.folders)) {
+              for (const rf of rData.folders) {
+                const name = typeof rf === "string" ? rf : rf.name || rf.styleCode || rf.folder || "product";
+                if (!folderMap.has(name)) {
+                  folderMap.set(name, {
+                    name,
+                    path: typeof rf === "object" && rf.path ? rf.path : `/storage/products/${name}`,
+                    files: typeof rf === "object" && Array.isArray(rf.files) ? rf.files : [{ name: "product.json", size: 1024, modified: (/* @__PURE__ */ new Date()).toISOString(), url: `/storage/products/${name}/product.json` }],
+                    hasProductJson: typeof rf === "object" && typeof rf.hasProductJson === "boolean" ? rf.hasProductJson : true,
+                    productPreview: typeof rf === "object" ? rf.productPreview : null,
+                    modified: typeof rf === "object" && rf.modified ? rf.modified : (/* @__PURE__ */ new Date()).toISOString()
+                  });
+                }
+              }
+            }
+          }
+        } catch (e) {
+        }
+      }
+      const allFolders = Array.from(folderMap.values());
+      res.json({ success: true, count: allFolders.length, folders: allFolders });
     } catch (err) {
       res.status(500).json({ success: false, error: err.message });
     }
@@ -458,11 +634,66 @@ async function startServer() {
       res.status(500).json({ success: false, error: err.message });
     }
   });
-  app.get("/api/orders", (req, res) => {
-    const orders = readJson(ORDERS_FILE, []);
+  const INQUIRIES_FILE = path.join(__dirname, "data", "inquiries.json");
+  app.post("/api/contact", (req, res) => {
+    try {
+      const { name, email, message } = req.body;
+      const inquiries = readJson(INQUIRIES_FILE, []);
+      const newInquiry = {
+        id: `inq_${Date.now()}`,
+        name: name || "",
+        email: email || "",
+        message: message || "",
+        createdAt: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      inquiries.unshift(newInquiry);
+      writeJson(INQUIRIES_FILE, inquiries);
+      res.json({ success: true, message: "Message sent successfully" });
+    } catch (err) {
+      res.status(500).json({ success: false, error: err.message });
+    }
+  });
+  app.get("/api/orders", async (req, res) => {
+    let orders = readJson(ORDERS_FILE, []);
+    const config = getStorageConfig();
+    if (config.enabled && config.serverUrl) {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 3500);
+        const remoteUrl = config.serverUrl.includes("?") ? `${config.serverUrl}&action=orders` : `${config.serverUrl}?action=orders`;
+        const headers = { "Content-Type": "application/json" };
+        if (config.authToken) {
+          headers["Authorization"] = `Bearer ${config.authToken}`;
+          headers["X-API-Key"] = config.authToken;
+        }
+        const resp = await fetch(remoteUrl, { headers, signal: controller.signal });
+        clearTimeout(timeout);
+        if (resp.ok) {
+          const rData = await resp.json().catch(() => ({}));
+          if (rData.success && Array.isArray(rData.orders) && rData.orders.length > 0) {
+            const map = /* @__PURE__ */ new Map();
+            orders.forEach((o) => {
+              const k = o.orderId || o.orderNumber;
+              if (k) map.set(k, o);
+            });
+            rData.orders.forEach((ro) => {
+              const k = ro.orderId || ro.orderNumber;
+              if (k) {
+                map.set(k, { ...map.get(k) || {}, ...ro });
+              }
+            });
+            orders = Array.from(map.values()).sort(
+              (a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime()
+            );
+            writeJson(ORDERS_FILE, orders);
+          }
+        }
+      } catch (err) {
+      }
+    }
     res.json({ success: true, orders, count: orders.length });
   });
-  app.post("/api/orders", (req, res) => {
+  app.post("/api/orders", async (req, res) => {
     const newOrder = req.body;
     if (!newOrder || typeof newOrder !== "object") {
       return res.status(400).json({ success: false, message: "Invalid order data provided" });
@@ -475,6 +706,7 @@ async function startServer() {
       status: newOrder.status || "Pending",
       createdAt: newOrder.createdAt || (/* @__PURE__ */ new Date()).toISOString()
     };
+    const storageResult = await saveOrderToFolder(finalOrder);
     const orders = readJson(ORDERS_FILE, []);
     const existingIndex = orders.findIndex(
       (o) => o.orderId === finalOrder.orderId || o.id === finalOrder.orderId
@@ -520,9 +752,14 @@ async function startServer() {
     } catch (custErr) {
       console.warn("[Order] Could not auto-sync customer:", custErr);
     }
-    res.json({ success: true, order: finalOrder, count: orders.length });
+    res.json({
+      success: true,
+      order: finalOrder,
+      count: orders.length,
+      storage: storageResult
+    });
   });
-  app.put("/api/orders/:id", (req, res) => {
+  app.put("/api/orders/:id", async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
     const orders = readJson(ORDERS_FILE, []);
@@ -530,6 +767,29 @@ async function startServer() {
     if (idx >= 0) {
       orders[idx].status = status;
       writeJson(ORDERS_FILE, orders);
+      const safeFolder = id.toString().replace(/[^a-zA-Z0-9_\-\.]/g, "_");
+      const orderDir = path.join(ORDERS_STORAGE_DIR, safeFolder);
+      if (fs.existsSync(orderDir)) {
+        try {
+          fs.writeFileSync(path.join(orderDir, "order.json"), JSON.stringify(orders[idx], null, 2), "utf-8");
+        } catch (e) {
+        }
+      }
+      const config = getStorageConfig();
+      if (config.enabled && config.serverUrl) {
+        try {
+          fetch(`${config.serverUrl}?action=update_order_status`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              ...config.authToken ? { Authorization: `Bearer ${config.authToken}`, "X-API-Key": config.authToken } : {}
+            },
+            body: JSON.stringify({ action: "update_order_status", orderId: id, status })
+          }).catch(() => {
+          });
+        } catch (e) {
+        }
+      }
       res.json({ success: true, order: orders[idx] });
     } else {
       res.status(404).json({ success: false, message: "Order not found" });
@@ -541,6 +801,29 @@ async function startServer() {
     const initialCount = orders.length;
     orders = orders.filter((o) => o.orderId !== id && o.id !== id);
     writeJson(ORDERS_FILE, orders);
+    const safeFolder = id.toString().replace(/[^a-zA-Z0-9_\-\.]/g, "_");
+    const orderDir = path.join(ORDERS_STORAGE_DIR, safeFolder);
+    if (fs.existsSync(orderDir)) {
+      try {
+        fs.rmSync(orderDir, { recursive: true, force: true });
+      } catch (e) {
+      }
+    }
+    const config = getStorageConfig();
+    if (config.enabled && config.serverUrl) {
+      try {
+        fetch(`${config.serverUrl}?action=delete_order`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...config.authToken ? { Authorization: `Bearer ${config.authToken}`, "X-API-Key": config.authToken } : {}
+          },
+          body: JSON.stringify({ action: "delete_order", orderId: id })
+        }).catch(() => {
+        });
+      } catch (e) {
+      }
+    }
     res.json({ success: true, deleted: orders.length !== initialCount, count: orders.length });
   });
   app.get("/api/customers", (req, res) => {
@@ -593,6 +876,104 @@ async function startServer() {
     };
     writeJson(AUTH_CONFIG_FILE, updated);
     res.json({ success: true, config: updated });
+  });
+  const getGeminiClient = () => {
+    const apiKey = process.env.GEMINI_API_KEY || "";
+    return new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        headers: {
+          "User-Agent": "aistudio-build"
+        }
+      }
+    });
+  };
+  app.post("/api/chat", async (req, res) => {
+    try {
+      const { message, history } = req.body || {};
+      if (!message || typeof message !== "string" || !message.trim()) {
+        return res.status(400).json({ error: "Message is required." });
+      }
+      const products = readJson(PRODUCTS_FILE, []);
+      const productCatalogSummary = Array.isArray(products) ? products.slice(0, 16).map(
+        (p) => `\u2022 ${p.name} (Style: ${p.styleCode}, Category: ${p.category}, Price: ${p.price} ${p.currency || "Tk."}, Color: ${p.color}, Fabric: ${p.fabric || "100% Egyptian Cotton"}, Stock: ${p.stock || "Available"}, Sizes: ${Array.isArray(p.sizes) ? p.sizes.join(", ") : "S, M, L, XL"})`
+      ).join("\n") : "The Royal Bengal luxury shirts available.";
+      const systemInstruction = `You are "Bengal Concierge", the exclusive luxury AI styling and shopping assistant for "The Royal Bengal" (theroyalbengal.shop).
+Your tone is sophisticated, distinguished, polite, and helpful\u2014embodying executive elegance and the spirit of "Made For The Hunt".
+
+Key Brand Knowledge:
+1. Product Lines:
+   - "Boardroom Hunt" (e.g., Bottle Green, Charcol Violet, Cotton Cloud, Lucite Green, Maroon): Executive command tailored luxury formal shirts. Price: 2,800 - 3,500 Tk.
+   - "Daily Hunt" (Office Ready Clouds, Olive, Silver Olive): Premium everyday executive cotton shirts. Price: ~2,000 Tk.
+   - "24x7 Band Collar" (Greyscale, Midnight Blue, Charcol Grey, Winter White): Mandarin / band collar tailored shirts. Price: 2,400 - 2,500 Tk.
+   - "Signature Hunt" (Butterscotch Caramel, Cotton Cream, Blue Sky): Pure Egyptian cotton statement pieces. Price: 2,800 Tk.
+2. Fabric & Craft:
+   - 100% Giza Egyptian Long-Staple Cotton, high-density weave, mother-of-pearl buttons, single-needle tailoring, export QC passed.
+3. Delivery & Guarantees:
+   - 2-Hour Express Delivery inside Dhaka city.
+   - 1-Month Hassle-Free Exchange guarantee.
+   - Cash on Delivery (COD), bKash, and Nagad payment options.
+4. Current Products in Catalog:
+${productCatalogSummary}
+
+Guidelines:
+- Recommend specific shirts based on customer preferences, occasions (business meeting, evening gala, casual elegance, weddings), or color tastes.
+- Provide size recommendations if asked (sizes S, M, L, XL, 2XL, 3XL with tailored ergonomic fits).
+- Mention that customers can click any shirt in the catalog to view high-definition fabric weaves with the 2.5x Loupe zoom tool.
+- Keep responses concise, elegant, clear, and styled with bullet points where appropriate. Do not invent products outside the collection.`;
+      console.log("[Chat API] Received message:", message.trim());
+      const ai = getGeminiClient();
+      const contents = [];
+      if (Array.isArray(history)) {
+        for (const item of history) {
+          if (item && item.text && (item.role === "user" || item.role === "model")) {
+            contents.push({
+              role: item.role,
+              parts: [{ text: item.text }]
+            });
+          }
+        }
+      }
+      contents.push({
+        role: "user",
+        parts: [{ text: message.trim() }]
+      });
+      const candidateModels = ["gemini-flash-latest", "gemini-3.8-flash", "gemini-3.1-flash-lite"];
+      let response = null;
+      let lastError = null;
+      for (const modelName of candidateModels) {
+        try {
+          response = await ai.models.generateContent({
+            model: modelName,
+            contents,
+            config: {
+              systemInstruction,
+              temperature: 0.7
+            }
+          });
+          if (response && response.text) {
+            break;
+          }
+        } catch (err) {
+          lastError = err;
+          console.warn(`[Chat API] Model ${modelName} error:`, err.message?.slice(0, 100));
+        }
+      }
+      if (!response || !response.text) {
+        throw lastError || new Error("No response generated from candidate models.");
+      }
+      const replyText = response.text || "Welcome to The Royal Bengal. How may I assist your style selection today?";
+      return res.json({
+        success: true,
+        reply: replyText
+      });
+    } catch (err) {
+      console.error("[Chat API Error]:", err);
+      return res.status(500).json({
+        error: "Failed to generate response from Gemini AI.",
+        details: err.message
+      });
+    }
   });
   app.get("/api/social-links", (req, res) => {
     const links = readJson(SOCIAL_FILE, null);

@@ -3,6 +3,10 @@ import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+import { GoogleGenAI } from '@google/genai';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -1065,6 +1069,128 @@ async function startServer() {
     };
     writeJson(AUTH_CONFIG_FILE, updated);
     res.json({ success: true, config: updated });
+  });
+
+  // --------------------------------------------------------------------------
+  // AI CHATBOT API (Powered by @google/genai with gemini-2.5-flash)
+  // --------------------------------------------------------------------------
+  const getGeminiClient = () => {
+    const apiKey = process.env.GEMINI_API_KEY || '';
+    return new GoogleGenAI({
+      apiKey,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        },
+      },
+    });
+  };
+
+  app.post('/api/chat', async (req, res) => {
+    try {
+      const { message, history } = req.body || {};
+      if (!message || typeof message !== 'string' || !message.trim()) {
+        return res.status(400).json({ error: 'Message is required.' });
+      }
+
+      const products = readJson(PRODUCTS_FILE, []);
+      const productCatalogSummary = Array.isArray(products)
+        ? products
+            .slice(0, 16)
+            .map(
+              (p: any) =>
+                `• ${p.name} (Style: ${p.styleCode}, Category: ${p.category}, Price: ${p.price} ${p.currency || 'Tk.'}, Color: ${p.color}, Fabric: ${p.fabric || '100% Egyptian Cotton'}, Stock: ${p.stock || 'Available'}, Sizes: ${Array.isArray(p.sizes) ? p.sizes.join(', ') : 'S, M, L, XL'})`
+            )
+            .join('\n')
+        : 'The Royal Bengal luxury shirts available.';
+
+      const systemInstruction = `You are "Bengal Concierge", the exclusive luxury AI styling and shopping assistant for "The Royal Bengal" (theroyalbengal.shop).
+Your tone is sophisticated, distinguished, polite, and helpful—embodying executive elegance and the spirit of "Made For The Hunt".
+
+Key Brand Knowledge:
+1. Product Lines:
+   - "Boardroom Hunt" (e.g., Bottle Green, Charcol Violet, Cotton Cloud, Lucite Green, Maroon): Executive command tailored luxury formal shirts. Price: 2,800 - 3,500 Tk.
+   - "Daily Hunt" (Office Ready Clouds, Olive, Silver Olive): Premium everyday executive cotton shirts. Price: ~2,000 Tk.
+   - "24x7 Band Collar" (Greyscale, Midnight Blue, Charcol Grey, Winter White): Mandarin / band collar tailored shirts. Price: 2,400 - 2,500 Tk.
+   - "Signature Hunt" (Butterscotch Caramel, Cotton Cream, Blue Sky): Pure Egyptian cotton statement pieces. Price: 2,800 Tk.
+2. Fabric & Craft:
+   - 100% Giza Egyptian Long-Staple Cotton, high-density weave, mother-of-pearl buttons, single-needle tailoring, export QC passed.
+3. Delivery & Guarantees:
+   - 2-Hour Express Delivery inside Dhaka city.
+   - 1-Month Hassle-Free Exchange guarantee.
+   - Cash on Delivery (COD), bKash, and Nagad payment options.
+4. Current Products in Catalog:
+${productCatalogSummary}
+
+Guidelines:
+- Recommend specific shirts based on customer preferences, occasions (business meeting, evening gala, casual elegance, weddings), or color tastes.
+- Provide size recommendations if asked (sizes S, M, L, XL, 2XL, 3XL with tailored ergonomic fits).
+- Mention that customers can click any shirt in the catalog to view high-definition fabric weaves with the 2.5x Loupe zoom tool.
+- Keep responses concise, elegant, clear, and styled with bullet points where appropriate. Do not invent products outside the collection.`;
+
+      console.log('[Chat API] Received message:', message.trim());
+      const ai = getGeminiClient();
+
+      // Format conversation contents
+      const contents: Array<{ role: string; parts: Array<{ text: string }> }> = [];
+
+      if (Array.isArray(history)) {
+        for (const item of history) {
+          if (item && item.text && (item.role === 'user' || item.role === 'model')) {
+            contents.push({
+              role: item.role,
+              parts: [{ text: item.text }],
+            });
+          }
+        }
+      }
+
+      contents.push({
+        role: 'user',
+        parts: [{ text: message.trim() }],
+      });
+
+      // Use latest flash model with fallback list for maximum reliability
+      const candidateModels = ['gemini-flash-latest', 'gemini-3.8-flash', 'gemini-3.1-flash-lite'];
+      let response: any = null;
+      let lastError: any = null;
+
+      for (const modelName of candidateModels) {
+        try {
+          response = await ai.models.generateContent({
+            model: modelName,
+            contents,
+            config: {
+              systemInstruction,
+              temperature: 0.7,
+            },
+          });
+          if (response && response.text) {
+            break;
+          }
+        } catch (err: any) {
+          lastError = err;
+          console.warn(`[Chat API] Model ${modelName} error:`, err.message?.slice(0, 100));
+        }
+      }
+
+      if (!response || !response.text) {
+        throw lastError || new Error('No response generated from candidate models.');
+      }
+
+      const replyText = response.text || "Welcome to The Royal Bengal. How may I assist your style selection today?";
+
+      return res.json({
+        success: true,
+        reply: replyText,
+      });
+    } catch (err: any) {
+      console.error('[Chat API Error]:', err);
+      return res.status(500).json({
+        error: 'Failed to generate response from Gemini AI.',
+        details: err.message,
+      });
+    }
   });
 
   // --------------------------------------------------------------------------
