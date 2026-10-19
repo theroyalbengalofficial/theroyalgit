@@ -63,12 +63,13 @@ export const Header: React.FC<HeaderProps> = ({
         <div className={`hidden md:flex items-center justify-between transition-all duration-500 ${
           isScrolled ? 'h-18 md:h-20' : 'h-22 md:h-26'
         }`}>
-          {/* Logo on Left (20% bigger with luxury breathing room) */}
-          <div className="flex items-center">
+          {/* Logo on Left: same height proportionately to the div component height */}
+          <div className="flex items-center h-full py-1.5 md:py-2">
             <BrandLogo 
-              size="md"
+              size="full"
               isScrolled={isScrolled}
               onClick={() => handleNavClick('home')}
+              className="h-full"
             />
           </div>
 
@@ -133,16 +134,17 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* Center / Logo Slot: Moves to exact center on scroll, or aligns left at top */}
-            <div className={`transition-all duration-500 ease-in-out flex items-center ${
+            <div className={`transition-all duration-500 ease-in-out flex items-center h-full py-1 ${
               isScrolled 
                 ? 'absolute left-1/2 -translate-x-1/2 justify-center' 
                 : 'justify-start'
             }`}>
               <BrandLogo 
-                size="md"
+                size="full"
                 isScrolled={isScrolled}
                 centered={isScrolled}
                 onClick={() => handleNavClick('home')}
+                className="h-full"
               />
             </div>
 
