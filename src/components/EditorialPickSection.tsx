@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, X, Sparkles } from 'lucide-react';
 import { Product } from '../types';
 
@@ -12,6 +12,7 @@ export interface EditorialItem {
   color: string;
   category: string;
   description: string;
+  productRef?: Product;
 }
 
 export const EDITORIAL_ITEMS: EditorialItem[] = [
@@ -73,16 +74,42 @@ export const EDITORIAL_ITEMS: EditorialItem[] = [
 ];
 
 interface EditorialPickSectionProps {
+  products?: Product[];
   onSelectProduct?: (product: Product) => void;
   onAddToCart?: (product: Product, size: string, color: string) => void;
   onProceedToCheckout?: (product: Product, size: string, color: string) => void;
 }
 
 export const EditorialPickSection: React.FC<EditorialPickSectionProps> = ({
+  products,
   onSelectProduct,
   onAddToCart,
   onProceedToCheckout,
 }) => {
+  // Derive active editorial items:
+  // If products are provided and some have isEditorialPick === true, use those!
+  // Otherwise fallback to curated EDITORIAL_ITEMS defaults.
+  const editorialList: EditorialItem[] = useMemo(() => {
+    if (products && products.length > 0) {
+      const selected = products.filter((p) => p.isEditorialPick);
+      if (selected.length > 0) {
+        return selected.map((p) => ({
+          id: p.id,
+          personaTitle: p.editorialPersona || p.name,
+          fabricSubtitle: p.editorialSubtitle || p.subtitle || `${p.fabric || 'Cotton'}, ${p.color || 'Signature'}`,
+          price: p.price,
+          imageLandscape: p.editorialLandscapeImage || p.gallery?.[1] || p.image,
+          imagePortrait: p.image || p.gallery?.[0] || '/assets/editorial/editorial_showstopper.webp',
+          color: p.color || 'Signature',
+          category: p.category || 'signature',
+          description: p.description || '',
+          productRef: p,
+        }));
+      }
+    }
+    return EDITORIAL_ITEMS;
+  }, [products]);
+
   // Expanded item state (null if collapsed, or the selected EditorialItem)
   const [expandedItem, setExpandedItem] = useState<EditorialItem | null>(null);
 
@@ -104,29 +131,34 @@ export const EditorialPickSection: React.FC<EditorialPickSectionProps> = ({
   const availableSizes = ['M', 'L', 'XL'];
 
   // Convert an editorial item to a Store Product for Cart & Checkout integration
-  const toProduct = (item: EditorialItem): Product => ({
-    id: item.id,
-    name: item.personaTitle,
-    subtitle: item.fabricSubtitle,
-    styleCode: item.id.toUpperCase(),
-    category: item.category as any,
-    price: item.price,
-    currency: 'Tk.',
-    stock: 25,
-    sizeStock: { M: 10, L: 10, XL: 5 },
-    description: item.description,
-    fabric: '100% Export Grade Cotton',
-    color: item.color,
-    colorOptions: [{ name: item.color, hex: '#F25C05' }],
-    image: item.imagePortrait,
-    sizes: ['M', 'L', 'XL'],
-    gallery: [item.imageLandscape, item.imagePortrait],
-    measurements: [
-      { size: 'M', length: 28, chest: 41, sleeveLength: 8.5 },
-      { size: 'L', length: 29.5, chest: 42, sleeveLength: 9 },
-      { size: 'XL', length: 30, chest: 44, sleeveLength: 9.5 },
-    ],
-  });
+  const toProduct = (item: EditorialItem): Product => {
+    if (item.productRef) {
+      return item.productRef;
+    }
+    return {
+      id: item.id,
+      name: item.personaTitle,
+      subtitle: item.fabricSubtitle,
+      styleCode: item.id.toUpperCase(),
+      category: item.category as any,
+      price: item.price,
+      currency: 'Tk.',
+      stock: 25,
+      sizeStock: { M: 10, L: 10, XL: 5 },
+      description: item.description,
+      fabric: '100% Export Grade Cotton',
+      color: item.color,
+      colorOptions: [{ name: item.color, hex: '#F25C05' }],
+      image: item.imagePortrait,
+      sizes: ['M', 'L', 'XL'],
+      gallery: [item.imageLandscape, item.imagePortrait],
+      measurements: [
+        { size: 'M', length: 28, chest: 41, sleeveLength: 8.5 },
+        { size: 'L', length: 29.5, chest: 42, sleeveLength: 9 },
+        { size: 'XL', length: 30, chest: 44, sleeveLength: 9.5 },
+      ],
+    };
+  };
 
   const handleCardClick = (item: EditorialItem) => {
     setExpandedItem(item);
@@ -329,7 +361,7 @@ export const EditorialPickSection: React.FC<EditorialPickSectionProps> = ({
           className="flex gap-4 sm:gap-5 overflow-x-auto pb-4 pt-1 snap-x snap-mandatory scrollbar-none scroll-smooth"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {EDITORIAL_ITEMS.map((item) => {
+          {editorialList.map((item) => {
             const isExpanded = expandedItem?.id === item.id;
             const currentSize = cardSizes[item.id] || 'M';
 

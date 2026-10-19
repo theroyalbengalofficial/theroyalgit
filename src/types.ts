@@ -31,6 +31,11 @@ export interface Product {
   measurements: ProductMeasurement[];
   badge?: string;
   isNewArrival?: boolean;
+  isEditorialPick?: boolean;
+  editorialPersona?: string;
+  editorialSubtitle?: string;
+  editorialLandscapeImage?: string;
+  editorialOrder?: number;
   stock?: number;
   sizeStock?: Record<string, number>;
 }

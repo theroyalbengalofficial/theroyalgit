@@ -20,8 +20,8 @@ const DUMMY_CUSTOMER_IDENTIFIERS = new Set([
   'nafis.fcommerce@facebook.com',
 ]);
 
-// Known dummy product IDs that should be permanently stripped
-const DUMMY_PRODUCT_IDS = new Set(['test-101', 'trb-009-dummy', 'trb-dummy']);
+// Known dummy or removed product IDs that should be permanently stripped
+const DUMMY_PRODUCT_IDS = new Set(['test-101', 'trb-009-dummy', 'trb-dummy', 'trb-mup1j0u7-npy4', 'TRB-016']);
 
 // Known dummy order IDs to permanently purge
 const DUMMY_ORDER_IDS = new Set([
@@ -416,6 +416,21 @@ export const storeService = {
     }).catch((err) => console.warn('[storeService] Failed to put product to server:', err));
 
     return updatedProduct;
+  },
+
+  toggleEditorialPick(id: string): Product | null {
+    const products = this.getProducts();
+    const product = products.find((p) => p.id === id);
+    if (!product) return null;
+    return this.updateProduct(id, { isEditorialPick: !product.isEditorialPick });
+  },
+
+  setEditorialPick(id: string, isEditorial: boolean, persona?: string, subtitle?: string): Product | null {
+    return this.updateProduct(id, {
+      isEditorialPick: isEditorial,
+      ...(persona !== undefined ? { editorialPersona: persona } : {}),
+      ...(subtitle !== undefined ? { editorialSubtitle: subtitle } : {}),
+    });
   },
 
   deleteProduct(id: string): boolean {

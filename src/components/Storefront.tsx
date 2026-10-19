@@ -217,6 +217,7 @@ export const Storefront: React.FC = () => {
 
             {/* Editorial Pick Carousel Section (Replaces Choose Your Hunt) */}
             <EditorialPickSection
+              products={products}
               onSelectProduct={handleSelectProduct}
               onAddToCart={handleAddToCart}
               onProceedToCheckout={(product, size, color) => {

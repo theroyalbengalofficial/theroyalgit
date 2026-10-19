@@ -49,11 +49,120 @@ import {
   Share2,
   HardDrive,
   Upload,
+  Sparkles,
+  Star,
 } from 'lucide-react';
 
-type AdminTab = 'overview' | 'orders' | 'products' | 'customers';
+type AdminTab = 'overview' | 'orders' | 'products' | 'editorial' | 'customers';
 
 const STANDARD_SIZES = ['S', 'M', 'L', 'XL', '2XL', '3XL'] as const;
+
+interface EditorialProductRowProps {
+  product: Product;
+  onRemove: (id: string) => void;
+  onSaveMetadata: (id: string, persona: string, subtitle: string) => void;
+}
+
+const EditorialProductRow: React.FC<EditorialProductRowProps> = ({
+  product,
+  onRemove,
+  onSaveMetadata,
+}) => {
+  const [persona, setPersona] = useState(product.editorialPersona || product.name || '');
+  const [subtitle, setSubtitle] = useState(product.editorialSubtitle || product.subtitle || '');
+  const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    setPersona(product.editorialPersona || product.name || '');
+    setSubtitle(product.editorialSubtitle || product.subtitle || '');
+  }, [product]);
+
+  return (
+    <div className="p-4 sm:p-5 bg-neutral-950 border border-amber-500/30 hover:border-amber-500/60 transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      {/* Product Image & Info */}
+      <div className="flex items-center gap-3.5 min-w-[240px]">
+        <img
+          src={product.image}
+          alt={product.name}
+          className="w-16 h-20 object-cover object-top border border-white/10 shrink-0"
+        />
+        <div>
+          <div className="flex items-center gap-1.5 mb-1">
+            <span className="bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] uppercase px-1.5 py-0.2 font-bold tracking-wider">
+              Featured Pick
+            </span>
+            <span className="text-[10px] text-neutral-400 font-mono">
+              {product.styleCode}
+            </span>
+          </div>
+          <h4 className="text-white font-semibold text-sm">{product.name}</h4>
+          <div className="text-xs text-[#F25C05] font-mono mt-0.5">
+            Tk. {product.price.toLocaleString()}
+          </div>
+        </div>
+      </div>
+
+      {/* Editable Persona & Subtitle */}
+      <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+        <div>
+          <label className="block text-[10px] uppercase tracking-wider text-neutral-400 mb-1">
+            Persona Headline (e.g. For the Showstopper with Showmanship)
+          </label>
+          <input
+            type="text"
+            value={persona}
+            onChange={(e) => {
+              setPersona(e.target.value);
+              setIsSaved(false);
+            }}
+            placeholder="e.g. For the Signature Appearances"
+            className="w-full px-2.5 py-1.5 bg-black/80 border border-white/20 text-white text-xs focus:outline-none focus:border-[#F25C05]"
+          />
+        </div>
+        <div>
+          <label className="block text-[10px] uppercase tracking-wider text-neutral-400 mb-1">
+            Fabric / Collar Subtitle
+          </label>
+          <input
+            type="text"
+            value={subtitle}
+            onChange={(e) => {
+              setSubtitle(e.target.value);
+              setIsSaved(false);
+            }}
+            placeholder="e.g. Ivory stripe, Cuban collar"
+            className="w-full px-2.5 py-1.5 bg-black/80 border border-white/20 text-white text-xs focus:outline-none focus:border-[#F25C05]"
+          />
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
+        <button
+          onClick={() => {
+            onSaveMetadata(product.id, persona, subtitle);
+            setIsSaved(true);
+            setTimeout(() => setIsSaved(false), 2000);
+          }}
+          className={`px-3 py-1.5 text-xs uppercase font-medium tracking-wider transition-colors cursor-pointer border ${
+            isSaved
+              ? 'bg-emerald-950/70 border-emerald-500/50 text-emerald-400'
+              : 'bg-white/10 hover:bg-white/20 border-white/20 text-white'
+          }`}
+        >
+          {isSaved ? 'Saved ✓' : 'Save Copy'}
+        </button>
+        <button
+          onClick={() => onRemove(product.id)}
+          className="p-1.5 bg-rose-950/30 hover:bg-rose-900/50 text-rose-300 border border-rose-500/30 transition-colors cursor-pointer"
+          title="Remove from Editorial Pick"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+};
 
 export const AdminDashboard: React.FC = () => {
   const { admin, logout, adminCredentials, updateCredentials } = useAdminAuth();
@@ -95,9 +204,10 @@ export const AdminDashboard: React.FC = () => {
   const [selectedCustomerForView, setSelectedCustomerForView] = useState<CustomerUser | null>(null);
   const [copiedPhoneId, setCopiedPhoneId] = useState<string | null>(null);
 
-  // Products Tab filters & Modals
+  // Products & Editorial Tab filters & Modals
   const [productSearch, setProductSearch] = useState('');
   const [productCategoryFilter, setProductCategoryFilter] = useState<string>('all');
+  const [editorialSearch, setEditorialSearch] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
@@ -118,6 +228,10 @@ export const AdminDashboard: React.FC = () => {
     images: ['', '', ''] as string[],
     sizes: ['S', 'M', 'L', 'XL', '2XL', '3XL'] as string[],
     sizeStock: { S: 5, M: 8, L: 8, XL: 4, '2XL': 0, '3XL': 0 } as Record<string, number>,
+    isEditorialPick: false,
+    editorialPersona: '',
+    editorialSubtitle: '',
+    editorialLandscapeImage: '',
   });
 
   const showToast = (msg: string) => {
@@ -277,6 +391,21 @@ export const AdminDashboard: React.FC = () => {
     });
   }, [products, productCategoryFilter, productSearch]);
 
+  // Editorial picks list
+  const editorialProducts = useMemo(() => {
+    return products.filter((p) => p.isEditorialPick);
+  }, [products]);
+
+  // Non-editorial products for quick selection
+  const nonEditorialProducts = useMemo(() => {
+    return products.filter((p) => !p.isEditorialPick && (
+      !editorialSearch ||
+      p.name.toLowerCase().includes(editorialSearch.toLowerCase()) ||
+      p.styleCode.toLowerCase().includes(editorialSearch.toLowerCase()) ||
+      p.color.toLowerCase().includes(editorialSearch.toLowerCase())
+    ));
+  }, [products, editorialSearch]);
+
   // Customers filtered list
   const filteredCustomers = useMemo(() => {
     return customers.filter((cust) => {
@@ -349,6 +478,10 @@ export const AdminDashboard: React.FC = () => {
       images: [ASSETS.shirtNavy || ASSETS.modelShirt, '', ''],
       sizes: initialChosenSizes,
       sizeStock: initialSizeStock,
+      isEditorialPick: false,
+      editorialPersona: '',
+      editorialSubtitle: '',
+      editorialLandscapeImage: '',
     });
     setEditingProduct(null);
     setIsAddModalOpen(true);
@@ -391,9 +524,36 @@ export const AdminDashboard: React.FC = () => {
       images: initialImages,
       sizes: chosenSizes.length > 0 ? chosenSizes : ['M', 'L', 'XL'],
       sizeStock: existingSizeStock,
+      isEditorialPick: product.isEditorialPick || false,
+      editorialPersona: product.editorialPersona || '',
+      editorialSubtitle: product.editorialSubtitle || '',
+      editorialLandscapeImage: product.editorialLandscapeImage || '',
     });
     setEditingProduct(product);
     setIsAddModalOpen(true);
+  };
+
+  const handleToggleEditorial = (productId: string) => {
+    const updated = storeService.toggleEditorialPick(productId);
+    if (updated) {
+      setProducts(storeService.getProducts());
+      const p = storeService.getProducts().find((item) => item.id === productId);
+      if (p?.isEditorialPick) {
+        showToast(`★ Added "${p.name}" to Editorial Pick carousel!`);
+      } else {
+        showToast(`Removed "${p?.name || 'Product'}" from Editorial Pick.`);
+      }
+    }
+  };
+
+  const handleUpdateEditorialMetadata = (
+    productId: string,
+    persona: string,
+    subtitle: string
+  ) => {
+    storeService.setEditorialPick(productId, true, persona.trim(), subtitle.trim());
+    setProducts(storeService.getProducts());
+    showToast('Editorial tagline updated successfully.');
   };
 
   const handleSaveProduct = (e: React.FormEvent) => {
@@ -442,6 +602,10 @@ export const AdminDashboard: React.FC = () => {
         image: primaryImage,
         gallery: validImages,
         sizes: activeSizes,
+        isEditorialPick: formData.isEditorialPick,
+        editorialPersona: formData.editorialPersona.trim(),
+        editorialSubtitle: formData.editorialSubtitle.trim(),
+        editorialLandscapeImage: formData.editorialLandscapeImage.trim(),
       }).then((res) => {
         if (res.storage?.folder) {
           showToast(`📁 Updated "${formData.name}" with ${validImages.length} images: ${res.storage.folderPath}`);
@@ -467,6 +631,10 @@ export const AdminDashboard: React.FC = () => {
         image: primaryImage,
         sizes: activeSizes,
         gallery: validImages,
+        isEditorialPick: formData.isEditorialPick,
+        editorialPersona: formData.editorialPersona.trim(),
+        editorialSubtitle: formData.editorialSubtitle.trim(),
+        editorialLandscapeImage: formData.editorialLandscapeImage.trim(),
         measurements: [
           { size: 'S', length: 27.5, chest: 38, sleeveLength: 8.0 },
           { size: 'M', length: 28.0, chest: 41, sleeveLength: 8.5 },
@@ -674,6 +842,25 @@ export const AdminDashboard: React.FC = () => {
             </button>
 
             <button
+              onClick={() => setActiveTab('editorial')}
+              className={`flex items-center gap-2 px-4 py-2.5 text-xs tracking-[0.2em] uppercase font-medium transition-all cursor-pointer border ${
+                activeTab === 'editorial'
+                  ? 'bg-[#F25C05] text-white border-[#F25C05] shadow-[0_0_15px_rgba(242,92,5,0.4)]'
+                  : 'bg-neutral-950 text-neutral-400 border-white/10 hover:border-[#F25C05]/50 hover:text-white'
+              }`}
+            >
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              <span>Editorial Picks</span>
+              <span className={`ml-1 text-[10px] font-bold px-1.5 py-0.2 rounded-full border ${
+                editorialProducts.length > 0
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                  : 'bg-neutral-800 text-neutral-400 border-white/10'
+              }`}>
+                {editorialProducts.length}
+              </span>
+            </button>
+
+            <button
               onClick={() => setActiveTab('customers')}
               className={`flex items-center gap-2 px-4 py-2.5 text-xs tracking-[0.2em] uppercase font-medium transition-all cursor-pointer border ${
                 activeTab === 'customers'
@@ -699,6 +886,16 @@ export const AdminDashboard: React.FC = () => {
                 <Plus className="w-4 h-4" />
                 <span>Add New Product</span>
               </button>
+            )}
+            {activeTab === 'editorial' && (
+              <Link
+                to="/"
+                target="_blank"
+                className="flex items-center gap-2 px-4 py-2.5 bg-neutral-900 hover:bg-[#F25C05] text-white border border-white/20 hover:border-[#F25C05] text-xs font-medium tracking-[0.15em] uppercase transition-all cursor-pointer"
+              >
+                <ExternalLink className="w-4 h-4" />
+                <span>View on Homepage</span>
+              </Link>
             )}
             {activeTab === 'orders' && (
               <div className="text-xs text-neutral-400 uppercase tracking-wider">
@@ -1516,7 +1713,18 @@ export const AdminDashboard: React.FC = () => {
                             </td>
 
                             {/* Actions */}
-                            <td className="py-4 px-4 align-top text-right space-x-2">
+                            <td className="py-4 px-4 align-top text-right space-x-1.5 whitespace-nowrap">
+                              <button
+                                onClick={() => handleToggleEditorial(product.id)}
+                                className={`p-1.5 transition-colors cursor-pointer border ${
+                                  product.isEditorialPick
+                                    ? 'text-amber-300 bg-amber-500/20 border-amber-500/60 shadow-[0_0_10px_rgba(245,158,11,0.25)]'
+                                    : 'text-neutral-400 hover:text-amber-300 bg-white/5 hover:bg-white/10 border-white/15'
+                                }`}
+                                title={product.isEditorialPick ? 'Featured on Homepage Editorial (Click to remove)' : 'Feature on Homepage Editorial Pick'}
+                              >
+                                <Sparkles className={`w-4 h-4 ${product.isEditorialPick ? 'text-amber-400 fill-amber-400' : ''}`} />
+                              </button>
                               <button
                                 onClick={() => openEditProductModal(product)}
                                 className="p-1.5 text-neutral-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/15 transition-colors cursor-pointer"
@@ -1539,6 +1747,173 @@ export const AdminDashboard: React.FC = () => {
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* ==================== TAB 3.5: EDITORIAL PICKS CURATION ==================== */}
+        {activeTab === 'editorial' && (
+          <div className="space-y-8 animate-in fade-in duration-300">
+            {/* Header / Intro Card */}
+            <div className="p-6 bg-neutral-950 border border-amber-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              <div>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <Sparkles className="w-5 h-5 text-amber-400" />
+                  <h3 className="text-sm sm:text-base font-bold uppercase tracking-[0.2em] text-white">
+                    Homepage Editorial Pick Carousel Management
+                  </h3>
+                  <span className="bg-[#F25C05] text-white text-[9px] uppercase px-2 py-0.5 font-bold tracking-widest">
+                    LIVE HOMEPAGE
+                  </span>
+                </div>
+                <p className="text-xs text-neutral-400 max-w-2xl font-light leading-relaxed">
+                  Choose which shirts appear in the signature Editorial Pick carousel and expandable spotlight on the homepage. You can customize the persona headline (e.g. <em>For the Showstopper with Showmanship</em>) and collar/fabric description for each piece.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-3 shrink-0">
+                <Link
+                  to="/"
+                  target="_blank"
+                  className="px-4 py-2.5 bg-[#F25C05] hover:bg-[#ff6811] text-white text-xs font-medium tracking-[0.15em] uppercase transition-all shadow-[0_0_15px_rgba(242,92,5,0.35)] flex items-center gap-2 cursor-pointer"
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  <span>Preview Storefront</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Section 1: Active Editorial Picks */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-white flex items-center gap-2">
+                    <span>Active Editorial Picks</span>
+                    <span className="px-2 py-0.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-mono font-bold rounded-full">
+                      {editorialProducts.length} selected
+                    </span>
+                  </h4>
+                  <p className="text-[11px] text-neutral-400 mt-0.5">
+                    {editorialProducts.length === 0
+                      ? 'No custom products selected. The homepage is currently displaying the 5 default curated showcase pieces.'
+                      : 'These shirts are currently featured in the homepage Editorial Pick section in the order shown below.'}
+                  </p>
+                </div>
+
+                {editorialProducts.length > 0 && (
+                  <button
+                    onClick={() => {
+                      if (window.confirm('Clear all custom editorial picks and revert to default curated items?')) {
+                        editorialProducts.forEach((p) => {
+                          storeService.setEditorialPick(p.id, false);
+                        });
+                        setProducts(storeService.getProducts());
+                        showToast('Reverted to default curated editorial collection.');
+                      }
+                    }}
+                    className="text-[11px] text-rose-400 hover:text-rose-200 uppercase tracking-wider cursor-pointer"
+                  >
+                    Reset to Default 5
+                  </button>
+                )}
+              </div>
+
+              {editorialProducts.length === 0 ? (
+                <div className="p-8 bg-neutral-950/60 border border-dashed border-white/15 text-center space-y-3">
+                  <div className="w-12 h-12 rounded-full bg-amber-500/10 text-amber-400 flex items-center justify-center mx-auto border border-amber-500/20">
+                    <Sparkles className="w-6 h-6" />
+                  </div>
+                  <h5 className="text-sm font-semibold text-white uppercase tracking-wider">
+                    Default Curated Collection Active
+                  </h5>
+                  <p className="text-xs text-neutral-400 max-w-md mx-auto">
+                    The homepage is currently showcasing the default high-fashion editorial set. Select any shirt from the catalog list below to customize your carousel!
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {editorialProducts.map((product) => (
+                    <EditorialProductRow
+                      key={product.id}
+                      product={product}
+                      onRemove={handleToggleEditorial}
+                      onSaveMetadata={handleUpdateEditorialMetadata}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Section 2: Catalog Products Selector */}
+            <div className="space-y-4 pt-6 border-t border-white/15">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-white">
+                    Add Shirts From Inventory to Editorial Pick
+                  </h4>
+                  <p className="text-[11px] text-neutral-400 mt-0.5">
+                    Click <strong>+ Feature in Editorial</strong> on any shirt to immediately add it to the carousel.
+                  </p>
+                </div>
+
+                <div className="relative w-full sm:w-64">
+                  <Search className="w-3.5 h-3.5 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={editorialSearch}
+                    onChange={(e) => setEditorialSearch(e.target.value)}
+                    placeholder="Search catalog shirts..."
+                    className="w-full pl-9 pr-3 py-1.5 bg-black/80 border border-white/15 text-white placeholder-neutral-500 text-xs focus:outline-none focus:border-[#F25C05]"
+                  />
+                </div>
+              </div>
+
+              {nonEditorialProducts.length === 0 ? (
+                <div className="p-6 bg-neutral-950/40 border border-white/10 text-center text-xs text-neutral-400">
+                  {editorialSearch
+                    ? 'No matching shirts found for this search.'
+                    : 'All catalog shirts are already featured in Editorial Pick!'}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                  {nonEditorialProducts.map((product) => (
+                    <div
+                      key={product.id}
+                      className="bg-neutral-950 border border-white/10 hover:border-amber-500/50 transition-all flex flex-col justify-between p-3.5 group"
+                    >
+                      <div className="flex gap-3">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-16 h-20 object-cover object-top border border-white/10 shrink-0"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[9px] uppercase font-mono text-[#F25C05] tracking-wider block">
+                            {product.styleCode}
+                          </span>
+                          <h5 className="text-white font-semibold text-xs truncate mt-0.5">
+                            {product.name}
+                          </h5>
+                          <span className="text-[10px] text-neutral-400 block capitalize">
+                            {product.category} · {product.color}
+                          </span>
+                          <span className="text-xs text-neutral-200 font-mono font-medium block mt-1">
+                            Tk. {product.price.toLocaleString()}
+                          </span>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => handleToggleEditorial(product.id)}
+                        className="mt-3 w-full py-2 bg-neutral-900 hover:bg-[#F25C05] text-neutral-300 hover:text-white border border-white/10 hover:border-[#F25C05] text-[11px] font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-amber-400 group-hover:text-white" />
+                        <span>+ Feature in Editorial Pick</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -2571,6 +2946,58 @@ export const AdminDashboard: React.FC = () => {
                     White Shirt
                   </button>
                 </div>
+              </div>
+
+              {/* Editorial Pick Carousel Configuration */}
+              <div className="p-4 bg-black/60 border border-amber-500/30 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-amber-400" />
+                    <span className="text-xs uppercase tracking-wider text-white font-semibold">
+                      Feature in Homepage Editorial Pick Carousel
+                    </span>
+                  </div>
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formData.isEditorialPick}
+                      onChange={(e) => setFormData({ ...formData, isEditorialPick: e.target.checked })}
+                      className="sr-only peer"
+                    />
+                    <div className="w-9 h-5 bg-neutral-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#F25C05]"></div>
+                  </label>
+                </div>
+                <p className="text-[11px] text-neutral-400 font-light">
+                  When enabled, this shirt will be featured on the homepage Editorial Pick carousel and can expand into the spotlight banner.
+                </p>
+                {formData.isEditorialPick && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-white/10">
+                    <div>
+                      <label className="block text-[10px] uppercase tracking-wider text-neutral-300 mb-1">
+                        Editorial Persona Headline
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.editorialPersona}
+                        onChange={(e) => setFormData({ ...formData, editorialPersona: e.target.value })}
+                        placeholder="e.g. For the Showstopper with Showmanship"
+                        className="w-full px-2.5 py-1.5 bg-black/80 border border-white/20 text-white text-xs focus:outline-none focus:border-[#F25C05]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] uppercase tracking-wider text-neutral-300 mb-1">
+                        Fabric / Collar Subtitle
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.editorialSubtitle}
+                        onChange={(e) => setFormData({ ...formData, editorialSubtitle: e.target.value })}
+                        placeholder="e.g. Ivory stripe, Cuban collar"
+                        className="w-full px-2.5 py-1.5 bg-black/80 border border-white/20 text-white text-xs focus:outline-none focus:border-[#F25C05]"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Action Buttons */}
