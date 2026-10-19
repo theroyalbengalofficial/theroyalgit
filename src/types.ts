@@ -59,7 +59,8 @@ export type ActivePage =
   | 'cart' 
   | 'checkout' 
   | 'about' 
-  | 'exchange';
+  | 'exchange'
+  | 'track-order';
 
 export interface PaymentGatewayKeys {
   bkashMerchantId: string;

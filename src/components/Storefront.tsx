@@ -10,6 +10,7 @@ import ProductDetail from './ProductDetail';
 import CheckoutSection from './CheckoutSection';
 import AboutView from './AboutView';
 import ExchangeView from './ExchangeView';
+import TrackOrderView from './TrackOrderView';
 import CartDrawer from './CartDrawer';
 import GatewaySettingsModal from './GatewaySettingsModal';
 import { CustomerAuthModal } from './CustomerAuthModal';
@@ -53,6 +54,9 @@ export const Storefront: React.FC = () => {
   const [activePage, setActivePage] = useState<ActivePage>('home');
   const [selectedCategory, setSelectedCategory] = useState<HuntCategory | 'all'>('signature');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(() => products[0] || null);
+  const [lastPlacedOrderId, setLastPlacedOrderId] = useState<string>(() => {
+    return localStorage.getItem('trb_last_order_id') || '';
+  });
 
   // Synchronize default selected product if products change
   useEffect(() => {
@@ -272,6 +276,14 @@ export const Storefront: React.FC = () => {
           />
         )}
 
+        {/* View: Track Order Live Status */}
+        {activePage === 'track-order' && (
+          <TrackOrderView
+            initialOrderId={lastPlacedOrderId}
+            setActivePage={navigateToPage}
+          />
+        )}
+
         {/* View: Checkout & Gateways (Page 10) */}
         {activePage === 'checkout' && (
           <CheckoutSection
@@ -280,11 +292,17 @@ export const Storefront: React.FC = () => {
             onRemoveItem={handleRemoveItem}
             gatewayKeys={gatewayKeys}
             onOpenGatewaySettings={() => setIsGatewaySettingsOpen(true)}
+            onTrackOrder={(orderId) => {
+              setLastPlacedOrderId(orderId);
+              navigateToPage('track-order');
+            }}
             onOrderCompleted={(order: OrderDetails) => {
               // Persist order to storeService so it dynamically shows up in Admin Panel
               storeService.addOrder(order);
               // Clean up cart
               setCartItems([]);
+              setLastPlacedOrderId(order.orderId);
+              localStorage.setItem('trb_last_order_id', order.orderId);
               showToast(`Order ${order.orderId} placed successfully! Tracking link sent to your phone.`);
             }}
           />

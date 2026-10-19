@@ -23,6 +23,7 @@ import {
   CreditCard,
   Copy,
   Check,
+  ArrowRight,
 } from 'lucide-react';
 
 interface CheckoutSectionProps {
@@ -32,6 +33,7 @@ interface CheckoutSectionProps {
   gatewayKeys: PaymentGatewayKeys;
   onOpenGatewaySettings: () => void;
   onOrderCompleted: (order: OrderDetails) => void;
+  onTrackOrder?: (orderId: string) => void;
 }
 
 export const CheckoutSection: React.FC<CheckoutSectionProps> = ({
@@ -39,6 +41,7 @@ export const CheckoutSection: React.FC<CheckoutSectionProps> = ({
   onUpdateQuantity,
   onRemoveItem,
   onOrderCompleted,
+  onTrackOrder,
 }) => {
   const {
     customer,
@@ -317,11 +320,21 @@ export const CheckoutSection: React.FC<CheckoutSectionProps> = ({
           </div>
 
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
+            {onTrackOrder && (
+              <button
+                type="button"
+                onClick={() => onTrackOrder(completedOrder.orderId)}
+                className="flex-1 py-3.5 bg-[#F25C05] hover:bg-[#ff6811] text-white text-xs tracking-[0.2em] uppercase font-bold cursor-pointer shadow-lg flex items-center justify-center gap-2"
+              >
+                <span>Track Order Live</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
             <button
               onClick={() => window.location.reload()}
-              className="flex-1 py-3.5 bg-[#F25C05] hover:bg-[#ff6811] text-white text-xs tracking-[0.2em] uppercase font-light cursor-pointer shadow-lg"
+              className="flex-1 py-3.5 bg-neutral-900 hover:bg-neutral-800 text-white border border-white/20 text-xs tracking-[0.2em] uppercase font-light cursor-pointer shadow-lg"
             >
-              Continue Exploring The Hunt
+              Continue Exploring
             </button>
           </div>
         </div>

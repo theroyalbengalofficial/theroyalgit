@@ -39,6 +39,7 @@ export const Header: React.FC<HeaderProps> = ({
   const totalCartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const navItems: { label: string; page: ActivePage }[] = [
+    { label: 'TRACK ORDER', page: 'track-order' },
     { label: 'ABOUT', page: 'about' },
     { label: 'EXCHANGE', page: 'exchange' },
     { label: 'SHOP', page: 'shop' },
@@ -167,7 +168,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Row 2: ABOUT, EXCHANGE, SHOP, CART on Mobile (Dissolves when user starts scrolling) */}
-          <div className={`grid grid-cols-4 gap-1.5 w-full transition-all duration-400 ease-in-out ${
+          <div className={`grid grid-cols-5 gap-1 w-full transition-all duration-400 ease-in-out ${
             isScrolled 
               ? 'max-h-0 opacity-0 -translate-y-3 scale-95 overflow-hidden pointer-events-none py-0 m-0' 
               : 'max-h-16 opacity-100 translate-y-0 scale-100 pt-2 pb-1'
@@ -177,8 +178,9 @@ export const Header: React.FC<HeaderProps> = ({
               return (
                 <button
                   key={item.page}
+                  id={`nav-link-${item.page}`}
                   onClick={() => handleNavClick(item.page)}
-                  className={`py-2 px-1 text-center text-[10px] sm:text-[11px] tracking-[0.14em] font-bold uppercase transition-all duration-200 cursor-pointer ${
+                  className={`py-2 px-0.5 text-center text-[9px] sm:text-[10px] tracking-wider font-bold uppercase transition-all duration-200 cursor-pointer ${
                     isActive
                       ? 'bg-[#F25C05] text-white shadow-[0_0_12px_rgba(242,92,5,0.4)] border border-[#F25C05]'
                       : 'bg-black/50 text-white/90 border border-[#F25C05]/60 hover:border-[#F25C05] hover:bg-[#F25C05]/20'
