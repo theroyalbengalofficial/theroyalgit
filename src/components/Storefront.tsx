@@ -3,7 +3,7 @@ import Header from './Header';
 import Footer from './Footer';
 import VideoHeroSection from './VideoHeroSection';
 import HeroSection from './HeroSection';
-import ChooseYourHunt from './ChooseYourHunt';
+import EditorialPickSection from './EditorialPickSection';
 import NewArrivals from './NewArrivals';
 import ShopCatalog from './ShopCatalog';
 import ProductDetail from './ProductDetail';
@@ -215,8 +215,15 @@ export const Storefront: React.FC = () => {
               setActivePage={navigateToPage}
             />
 
-            {/* Page 2 & Page 7: Choose Your Hunt Category Selector */}
-            <ChooseYourHunt onSelectCategory={handleSelectCategory} />
+            {/* Editorial Pick Carousel Section (Replaces Choose Your Hunt) */}
+            <EditorialPickSection
+              onSelectProduct={handleSelectProduct}
+              onAddToCart={handleAddToCart}
+              onProceedToCheckout={(product, size, color) => {
+                handleAddToCart(product, size, color);
+                setIsCartOpen(true);
+              }}
+            />
 
             {/* Page 3: New Arrivals Carousel */}
             <NewArrivals
