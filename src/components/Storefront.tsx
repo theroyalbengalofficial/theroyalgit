@@ -307,7 +307,7 @@ export const Storefront: React.FC = () => {
       {/* Customer Gmail & Facebook Login Modal */}
       <CustomerAuthModal />
 
-      {/* Floating AI Concierge Chatbot (Bottom-Right) */}
+      {/* Floating Hunter AI Chatbot (Bottom-Right) */}
       <AIChatbot />
 
       {/* Global Toast Notification */}

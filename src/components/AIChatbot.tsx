@@ -16,7 +16,7 @@ export const AIChatbot: React.FC = () => {
     {
       id: 'welcome-1',
       role: 'model',
-      text: "Greetings. I am your Royal Bengal Concierge. How may I assist your style, shirt sizing, or collection hunt today?",
+      text: "Greetings. I am Hunter AI, your executive styling assistant at The Royal Bengal. How may I assist your shirt sizing, fit, or collection hunt today?",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
@@ -125,7 +125,7 @@ export const AIChatbot: React.FC = () => {
               </div>
               <div>
                 <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-white flex items-center gap-1.5">
-                  <span>Bengal Concierge</span>
+                  <span>Hunter AI</span>
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping inline-block" />
                 </h3>
                 <p className="text-[10px] text-neutral-400 font-light tracking-wider">AI Executive Styling Assistant</p>
@@ -136,7 +136,7 @@ export const AIChatbot: React.FC = () => {
               <button
                 onClick={() => setIsOpen(false)}
                 className="p-1.5 text-neutral-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
-                title="Minimize Concierge"
+                title="Minimize Hunter AI"
               >
                 <Minimize2 className="w-4 h-4" />
               </button>
@@ -191,7 +191,7 @@ export const AIChatbot: React.FC = () => {
             {isLoading && (
               <div className="flex gap-2.5 items-center text-neutral-400 text-xs italic bg-neutral-900/50 p-2.5 rounded-xl border border-white/5 w-fit">
                 <Loader2 className="w-3.5 h-3.5 animate-spin text-[#F25C05]" />
-                <span>Concierge is curating recommendations...</span>
+                <span>Hunter AI is curating recommendations...</span>
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -245,7 +245,7 @@ export const AIChatbot: React.FC = () => {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="group relative flex items-center gap-2.5 px-4 py-3 bg-black/90 hover:bg-neutral-950 text-white rounded-full border border-[#F25C05] shadow-[0_4px_25px_rgba(242,92,5,0.45)] hover:shadow-[0_6px_35px_rgba(242,92,5,0.65)] transition-all duration-300 cursor-pointer active:scale-95"
-        aria-label="Toggle AI Concierge"
+        aria-label="Toggle Hunter AI"
       >
         <div className="relative">
           <div className="w-8 h-8 rounded-full bg-[#F25C05] flex items-center justify-center text-white shadow-md">
@@ -258,7 +258,7 @@ export const AIChatbot: React.FC = () => {
 
         <div className="text-left hidden sm:block">
           <span className="block text-[11px] font-bold tracking-[0.18em] uppercase text-white group-hover:text-[#F25C05] transition-colors">
-            {isOpen ? 'Close Concierge' : 'AI Concierge'}
+            {isOpen ? 'Close Hunter AI' : 'Hunter AI'}
           </span>
           <span className="block text-[9px] text-neutral-400 font-light tracking-wider">
             {isOpen ? 'Minimize assistant' : 'Ask Styling & Fits'}
