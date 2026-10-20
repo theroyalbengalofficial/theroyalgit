@@ -54,17 +54,17 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b border-white/10 ${
       isScrolled 
-        ? 'bg-black/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.8)] py-1.5 md:py-2' 
-        : 'bg-black/90 backdrop-blur-sm shadow-md py-2.5 sm:py-3 md:py-4'
+        ? 'bg-black/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.8)] py-1 md:py-1.5' 
+        : 'bg-black/90 backdrop-blur-sm shadow-md py-1.5 sm:py-2 md:py-2.5'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* ==================== DESKTOP NAVIGATION BAR (md and up) ==================== */}
         <div className={`hidden md:flex items-center justify-between transition-all duration-500 ${
-          isScrolled ? 'h-18 md:h-20' : 'h-22 md:h-26'
+          isScrolled ? 'h-14 md:h-16' : 'h-18 md:h-20'
         }`}>
           {/* Logo on Left: same height proportionately to the div component height */}
-          <div className="flex items-center h-full py-1.5 md:py-2">
+          <div className="flex items-center h-full py-1">
             <BrandLogo 
               size="full"
               isScrolled={isScrolled}
@@ -115,7 +115,7 @@ export const Header: React.FC<HeaderProps> = ({
           
           {/* Row 1: Logo, Hamburger (scrolled), and Cart toggle */}
           <div className={`relative flex items-center justify-between transition-all duration-500 ${
-            isScrolled ? 'h-16' : 'min-h-[64px] pb-1'
+            isScrolled ? 'h-13' : 'min-h-[54px] pb-0.5'
           }`}>
             
             {/* Left Slot: Hamburger Button (Dissolves in only when scrolled) */}
