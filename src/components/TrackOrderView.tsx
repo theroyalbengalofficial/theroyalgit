@@ -222,7 +222,7 @@ export const TrackOrderView: React.FC<TrackOrderViewProps> = ({
             Track Your Order
           </h1>
           <p className="text-xs sm:text-sm text-neutral-400 max-w-lg mx-auto font-light leading-relaxed">
-            Enter your Order Number (e.g., <code className="text-[#F25C05] font-mono font-semibold">TRB-373078</code>) or phone number to check live order status and delivery updates.
+            Enter your Order Number (e.g., <code className="text-[#F25C05] font-mono font-semibold">TRB-513546</code>) or phone number to check live order status and delivery updates.
           </p>
         </div>
 
@@ -237,7 +237,7 @@ export const TrackOrderView: React.FC<TrackOrderViewProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Enter Order # (e.g. TRB-373078) or Phone"
+              placeholder="Enter Order # (e.g. TRB-513546) or Phone"
               className="w-full pl-10 pr-4 py-3 bg-black/60 border border-white/10 text-white placeholder-neutral-500 text-xs sm:text-sm font-mono tracking-wider focus:outline-none focus:border-[#F25C05]"
             />
           </div>

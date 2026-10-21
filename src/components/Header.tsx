@@ -114,9 +114,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="md:hidden flex flex-col transition-all duration-500">
           
           {/* Row 1: Logo, Hamburger (scrolled), and Cart toggle */}
-          <div className={`relative flex items-center justify-between transition-all duration-500 ${
-            isScrolled ? 'h-13' : 'min-h-[54px] pb-0.5'
-          }`}>
+          <div className="relative flex items-center justify-between h-12 sm:h-13 transition-all duration-500">
             
             {/* Left Slot: Hamburger Button (Dissolves in only when scrolled) */}
             <div className={`flex items-center transition-all duration-400 ease-in-out ${
@@ -140,11 +138,11 @@ export const Header: React.FC<HeaderProps> = ({
                 : 'justify-start'
             }`}>
               <BrandLogo 
-                size="full"
+                size="sm"
                 isScrolled={isScrolled}
                 centered={isScrolled}
                 onClick={() => handleNavClick('home')}
-                className="h-full"
+                className="h-10 sm:h-11 max-h-10 sm:max-h-11 w-auto"
               />
             </div>
 

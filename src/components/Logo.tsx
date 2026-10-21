@@ -37,15 +37,15 @@ export const BrandLogo: React.FC<LogoProps> = ({
 }) => {
   // Proportional height matching parent div component
   const sizeClasses = {
-    xs: "h-8 md:h-9 w-auto",
-    sm: "h-11 md:h-12 w-auto",
-    md: isScrolled ? "h-14 md:h-16 w-auto" : "h-[68px] sm:h-[76px] md:h-[84px] w-auto",
+    xs: "h-8 md:h-9 w-auto max-h-8 md:max-h-9",
+    sm: "h-10 sm:h-11 w-auto max-h-10 sm:max-h-11",
+    md: isScrolled ? "h-10 sm:h-11 md:h-14 w-auto max-h-11 md:max-h-14" : "h-10 sm:h-12 md:h-16 w-auto max-h-12 md:max-h-16",
     lg: "h-20 md:h-22 w-auto",
     xl: "h-24 md:h-28 w-auto",
     full: "h-full max-h-full w-auto",
   }[size];
 
-  const isFill = size === 'full' || className.includes('h-full');
+  const isFill = size === 'full';
 
   return (
     <div 

@@ -29,6 +29,10 @@ const DUMMY_ORDER_IDS = new Set([
   'TRB-849182',
   'TRB-848995',
   'TRB-848410',
+  'TRB-373078',
+  'TRB-735841',
+  'TRB-733595',
+  'TRB-426850',
 ]);
 
 // No dummy orders: only real customer orders placed via checkout
