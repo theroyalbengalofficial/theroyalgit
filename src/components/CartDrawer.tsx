@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CartItem } from '../types';
 import { X, Trash2, Plus, Minus, ArrowRight, ShoppingBag } from 'lucide-react';
 
@@ -19,6 +19,16 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onRemoveItem,
   onProceedToCheckout,
 }) => {
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const subtotal = cartItems.reduce(
@@ -27,17 +37,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   );
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
+    <div className="fixed inset-0 z-[70] overflow-hidden">
       {/* Backdrop */}
       <div
         onClick={onClose}
-        className="absolute inset-0 bg-black/80 transition-opacity"
+        className="absolute inset-0 bg-black/80 backdrop-blur-xs transition-opacity"
       />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-neutral-950 border-l border-[#F25C05]/60 flex flex-col shadow-2xl">
+      <div className="fixed inset-y-0 right-0 max-w-full flex pl-0 sm:pl-10">
+        <div className="w-full sm:w-[420px] max-w-full bg-neutral-950 border-l border-[#F25C05]/60 flex flex-col shadow-2xl">
           {/* Header */}
-          <div className="px-6 py-5 border-b border-white/10 flex items-center justify-between bg-black/40">
+          <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-white/10 flex items-center justify-between bg-black/40">
             <div className="flex items-center gap-2">
               <ShoppingBag className="w-5 h-5 text-[#F25C05]" />
               <h2 className="text-sm font-light tracking-[0.2em] uppercase text-white">
@@ -132,7 +142,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
           {/* Footer with Subtotal & Proceed */}
           {cartItems.length > 0 && (
-            <div className="p-6 border-t border-white/10 bg-black/60 space-y-4">
+            <div className="p-4 sm:p-6 border-t border-white/10 bg-black/60 space-y-4">
               <div className="flex items-center justify-between text-sm font-light text-neutral-300">
                 <span>Subtotal (Incl. VAT)</span>
                 <span className="text-white font-mono text-base">Tk. {subtotal}</span>

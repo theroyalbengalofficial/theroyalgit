@@ -57,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({
         ? 'bg-black/95 backdrop-blur-md shadow-[0_4px_30px_rgba(0,0,0,0.8)] py-1 md:py-1.5' 
         : 'bg-black/90 backdrop-blur-sm shadow-md py-1.5 sm:py-2 md:py-2.5'
     }`}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 w-full">
         
         {/* ==================== DESKTOP NAVIGATION BAR (md and up) ==================== */}
         <div className={`hidden md:flex items-center justify-between transition-all duration-500 ${
@@ -111,23 +111,23 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* ==================== MOBILE NAVIGATION BAR (below md) ==================== */}
-        <div className="md:hidden flex flex-col transition-all duration-500">
+        <div className="md:hidden flex flex-col transition-all duration-500 w-full">
           
           {/* Row 1: Logo, Hamburger (scrolled), and Cart toggle */}
-          <div className="relative flex items-center justify-between h-12 sm:h-13 transition-all duration-500">
+          <div className="relative flex items-center justify-between h-12 sm:h-13 transition-all duration-500 w-full">
             
             {/* Left Slot: Hamburger Button (Dissolves in only when scrolled) */}
-            <div className={`flex items-center transition-all duration-400 ease-in-out ${
+            <div className={`flex items-center shrink-0 transition-all duration-400 ease-in-out z-20 ${
               isScrolled 
-                ? 'opacity-100 scale-100 w-10' 
+                ? 'opacity-100 scale-100 w-9 sm:w-10' 
                 : 'opacity-0 scale-75 w-0 overflow-hidden pointer-events-none'
             }`}>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="w-10 h-10 flex items-center justify-center text-white border border-white/20 bg-black/60 hover:border-[#F25C05] transition-all cursor-pointer"
+                className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-white border border-white/20 bg-black/60 hover:border-[#F25C05] transition-all cursor-pointer shrink-0"
                 aria-label="Toggle Navigation Menu"
               >
-                {mobileMenuOpen ? <X className="w-5 h-5 text-[#F25C05]" /> : <Menu className="w-5 h-5 text-white" />}
+                {mobileMenuOpen ? <X className="w-4 h-4 sm:w-5 sm:h-5 text-[#F25C05]" /> : <Menu className="w-4 h-4 sm:w-5 sm:h-5 text-white" />}
               </button>
             </div>
 
@@ -147,14 +147,14 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* Right Slot: Cart shortcut when scrolled, or balanced spacer to keep logo dead-centered */}
-            <div className={`flex items-center justify-end transition-all duration-400 ease-in-out ${
+            <div className={`flex items-center justify-end shrink-0 transition-all duration-400 ease-in-out z-20 ${
               isScrolled 
-                ? 'opacity-100 scale-100 w-10' 
+                ? 'opacity-100 scale-100 w-9 sm:w-10' 
                 : 'opacity-0 scale-75 w-0 overflow-hidden pointer-events-none'
             }`}>
               <button
                 onClick={() => setIsCartOpen(true)}
-                className="w-10 h-10 relative flex items-center justify-center text-white border border-[#F25C05]/50 bg-black/50 hover:border-[#F25C05] transition-all cursor-pointer"
+                className="w-9 h-9 sm:w-10 sm:h-10 relative flex items-center justify-center text-white border border-[#F25C05]/50 bg-black/50 hover:border-[#F25C05] transition-all cursor-pointer shrink-0"
                 aria-label="Shopping Cart"
               >
                 <ShoppingBag className="w-4 h-4 text-[#F25C05]" />
@@ -180,7 +180,7 @@ export const Header: React.FC<HeaderProps> = ({
                   key={item.page}
                   id={`nav-link-${item.page}`}
                   onClick={() => handleNavClick(item.page)}
-                  className={`py-2 px-0.5 text-center text-[9px] sm:text-[10px] tracking-wider font-bold uppercase transition-all duration-200 cursor-pointer ${
+                  className={`py-2 px-0.5 text-center text-[8.5px] min-[360px]:text-[9px] sm:text-[10px] tracking-wider font-bold uppercase transition-all duration-200 cursor-pointer truncate ${
                     isActive
                       ? 'bg-[#F25C05] text-white shadow-[0_0_12px_rgba(242,92,5,0.4)] border border-[#F25C05]'
                       : 'bg-black/50 text-white/90 border border-[#F25C05]/60 hover:border-[#F25C05] hover:bg-[#F25C05]/20'
@@ -194,12 +194,12 @@ export const Header: React.FC<HeaderProps> = ({
             {/* Mobile Top Cart Pill */}
             <button
               onClick={() => setIsCartOpen(true)}
-              className="py-2 px-1 text-center text-[10px] sm:text-[11px] tracking-[0.14em] font-bold uppercase transition-all duration-200 cursor-pointer bg-black/50 text-white/90 border border-[#F25C05]/60 hover:border-[#F25C05] hover:bg-[#F25C05]/20 flex items-center justify-center gap-1"
+              className="py-2 px-0.5 text-center text-[8.5px] min-[360px]:text-[9px] sm:text-[10px] tracking-wider font-bold uppercase transition-all duration-200 cursor-pointer bg-black/50 text-white/90 border border-[#F25C05]/60 hover:border-[#F25C05] hover:bg-[#F25C05]/20 flex items-center justify-center gap-0.5 truncate"
             >
-              <ShoppingBag className="w-3 h-3 text-[#F25C05]" />
+              <ShoppingBag className="w-3 h-3 text-[#F25C05] shrink-0" />
               <span>CART</span>
               {totalCartCount > 0 && (
-                <span className="bg-[#F25C05] text-white text-[9px] font-bold rounded-full px-1.5 py-0.2">
+                <span className="bg-[#F25C05] text-white text-[9px] font-bold rounded-full px-1 py-0.2 shrink-0">
                   {totalCartCount}
                 </span>
               )}

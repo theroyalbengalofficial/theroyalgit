@@ -116,7 +116,7 @@ export const AIChatbot: React.FC = () => {
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end">
       {/* Floating Chat Window */}
       {isOpen && (
-        <div className="w-[90vw] sm:w-[380px] md:w-[420px] h-[520px] max-h-[80vh] bg-neutral-950/95 backdrop-blur-xl border border-[#F25C05]/60 rounded-2xl shadow-[0_15px_60px_rgba(0,0,0,0.9),0_0_30px_rgba(242,92,5,0.25)] flex flex-col overflow-hidden mb-3.5 transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
+        <div className="w-[calc(100vw-32px)] sm:w-[380px] md:w-[420px] max-w-[calc(100vw-32px)] sm:max-w-[420px] h-[520px] max-h-[80vh] bg-neutral-950/95 backdrop-blur-xl border border-[#F25C05]/60 rounded-2xl shadow-[0_15px_60px_rgba(0,0,0,0.9),0_0_30px_rgba(242,92,5,0.25)] flex flex-col overflow-hidden mb-3.5 transition-all duration-300 animate-in fade-in slide-in-from-bottom-5">
           {/* Header */}
           <div className="px-4 py-3 bg-gradient-to-r from-black via-neutral-900 to-black border-b border-white/10 flex items-center justify-between">
             <div className="flex items-center gap-2.5">

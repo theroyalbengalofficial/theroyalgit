@@ -8,6 +8,9 @@
   html {
     scroll-behavior: smooth;
     font-family: 'Montserrat', sans-serif;
+    overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
   }
 
   body {
@@ -17,6 +20,9 @@
     background-color: #0b0e0c;
     color: #f3f4f6;
     overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
+    position: relative;
   }
 
   h1, h2, h3, h4, h5, h6 {
