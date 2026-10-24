@@ -226,7 +226,7 @@ export const Storefront: React.FC = () => {
               onAddToCart={handleAddToCart}
               onProceedToCheckout={(product, size, color) => {
                 handleAddToCart(product, size, color);
-                setIsCartOpen(true);
+                navigateToPage('checkout');
               }}
             />
 
@@ -297,9 +297,8 @@ export const Storefront: React.FC = () => {
               navigateToPage('track-order');
             }}
             onOrderCompleted={(order: OrderDetails) => {
-              // Persist order to storeService so it dynamically shows up in Admin Panel
-              storeService.addOrder(order);
-              // Clean up cart
+              // Note: Order is already persisted by CheckoutSection
+              // Clean up cart and store tracking ID
               setCartItems([]);
               setLastPlacedOrderId(order.orderId);
               localStorage.setItem('trb_last_order_id', order.orderId);

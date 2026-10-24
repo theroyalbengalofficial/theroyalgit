@@ -127,6 +127,7 @@ export const EditorialPickSection: React.FC<EditorialPickSectionProps> = ({
   const carouselRef = useRef<HTMLDivElement>(null);
   const expandedRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [orderingItemId, setOrderingItemId] = useState<string | null>(null);
 
   const availableSizes = ['M', 'L', 'XL'];
 
@@ -173,13 +174,22 @@ export const EditorialPickSection: React.FC<EditorialPickSectionProps> = ({
   };
 
   const handleOrderNow = (item: EditorialItem, size: string) => {
+    // Prevent duplicate rapid clicks and button lag
+    if (orderingItemId) return;
+    setOrderingItemId(item.id);
+
     const product = toProduct(item);
-    if (onAddToCart) {
-      onAddToCart(product, size, item.color);
-    }
+
+    // Call onProceedToCheckout ONLY, preventing double additions to cart
     if (onProceedToCheckout) {
       onProceedToCheckout(product, size, item.color);
+    } else if (onAddToCart) {
+      onAddToCart(product, size, item.color);
     }
+
+    setTimeout(() => {
+      setOrderingItemId(null);
+    }, 600);
   };
 
   const scrollCarousel = (direction: 'left' | 'right') => {
@@ -288,25 +298,37 @@ export const EditorialPickSection: React.FC<EditorialPickSectionProps> = ({
                   {expandedItem.fabricSubtitle}
                 </p>
 
-                {/* Size Selection */}
+                {/* Size Selection & Price */}
                 <div className="mb-4">
-                  <div className="flex items-center gap-2.5">
-                    {availableSizes.map((size) => {
-                      const isSelected = expandedSize === size;
-                      return (
-                        <button
-                          key={size}
-                          onClick={() => setExpandedSize(size)}
-                          className={`w-10 h-10 sm:w-11 sm:h-11 border text-xs sm:text-sm font-bold flex items-center justify-center transition-all cursor-pointer ${
-                            isSelected
-                              ? 'border-white bg-white/10 text-white ring-1 ring-white/50 shadow-sm'
-                              : 'border-neutral-800 text-neutral-400 hover:border-neutral-600 hover:text-white bg-black/40'
-                          }`}
-                        >
-                          {size}
-                        </button>
-                      );
-                    })}
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-2.5">
+                      {availableSizes.map((size) => {
+                        const isSelected = expandedSize === size;
+                        return (
+                          <button
+                            key={size}
+                            onClick={() => setExpandedSize(size)}
+                            className={`w-10 h-10 sm:w-11 sm:h-11 border text-xs sm:text-sm font-bold flex items-center justify-center transition-all cursor-pointer ${
+                              isSelected
+                                ? 'border-white bg-white/10 text-white ring-1 ring-white/50 shadow-sm'
+                                : 'border-neutral-800 text-neutral-400 hover:border-neutral-600 hover:text-white bg-black/40'
+                            }`}
+                          >
+                            {size}
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Price right to size */}
+                    <div className="text-right">
+                      <span className="text-[10px] sm:text-xs uppercase tracking-widest text-neutral-400 block font-light">
+                        Price
+                      </span>
+                      <span className="text-xl sm:text-2xl font-extrabold text-[#F25C05] font-mono tracking-tight whitespace-nowrap">
+                        Tk. {expandedItem.price?.toLocaleString()}
+                      </span>
+                    </div>
                   </div>
                   <p className="text-[11px] text-neutral-400 mt-2 font-light tracking-wide">
                     European standard sizing
@@ -315,10 +337,18 @@ export const EditorialPickSection: React.FC<EditorialPickSectionProps> = ({
 
                 {/* Order Button */}
                 <button
+                  disabled={orderingItemId === expandedItem.id}
                   onClick={() => handleOrderNow(expandedItem, expandedSize)}
-                  className="w-full sm:w-auto bg-[#F25C05] hover:bg-[#ff6910] active:scale-[0.99] text-white font-extrabold text-xs sm:text-sm tracking-[0.14em] uppercase py-3.5 px-6 transition-all duration-200 cursor-pointer shadow-[0_4px_20px_rgba(242,92,5,0.4)] text-center mt-2 mb-3"
+                  className="w-full sm:w-auto bg-[#F25C05] hover:bg-[#ff6910] active:scale-[0.99] disabled:opacity-75 disabled:cursor-wait text-white font-extrabold text-xs sm:text-sm tracking-[0.14em] uppercase py-3.5 px-6 transition-all duration-200 cursor-pointer shadow-[0_4px_20px_rgba(242,92,5,0.4)] text-center mt-2 mb-3 flex items-center justify-center gap-2"
                 >
-                  ORDER NOW TO SEIZE YOUR NEXT HUNT
+                  {orderingItemId === expandedItem.id ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                      <span>PROCEEDING TO CHECKOUT...</span>
+                    </>
+                  ) : (
+                    <span>ORDER NOW TO SEIZE YOUR NEXT HUNT</span>
+                  )}
                 </button>
 
                 <p className="text-[11px] text-neutral-400 font-light tracking-wide">
@@ -402,32 +432,43 @@ export const EditorialPickSection: React.FC<EditorialPickSectionProps> = ({
                       {item.fabricSubtitle}
                     </p>
 
-                    {/* Size Selector */}
+                    {/* Size Selector and Price */}
                     <div
                       className="mb-4"
                       onClick={(e) => e.stopPropagation()} // Prevent triggering card expand on size change
                     >
-                      <div className="flex items-center gap-2">
-                        {availableSizes.map((size) => {
-                          const isSelected = currentSize === size;
-                          return (
-                            <button
-                              key={size}
-                              type="button"
-                              onClick={() =>
-                                setCardSizes((prev) => ({ ...prev, [item.id]: size }))
-                              }
-                              className={`w-9 h-9 border text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
-                                isSelected
-                                  ? 'border-white bg-white/10 text-white ring-1 ring-white/50'
-                                  : 'border-neutral-800 text-neutral-400 hover:border-neutral-600 hover:text-white bg-black/40'
-                              }`}
-                            >
-                              {size}
-                            </button>
-                          );
-                        })}
+                      <div className="flex items-center justify-between gap-2">
+                        {/* Sizes */}
+                        <div className="flex items-center gap-1.5">
+                          {availableSizes.map((size) => {
+                            const isSelected = currentSize === size;
+                            return (
+                              <button
+                                key={size}
+                                type="button"
+                                onClick={() =>
+                                  setCardSizes((prev) => ({ ...prev, [item.id]: size }))
+                                }
+                                className={`w-8 h-8 sm:w-9 sm:h-9 border text-xs font-bold flex items-center justify-center transition-all cursor-pointer ${
+                                  isSelected
+                                    ? 'border-white bg-white/10 text-white ring-1 ring-white/50'
+                                    : 'border-neutral-800 text-neutral-400 hover:border-neutral-600 hover:text-white bg-black/40'
+                                }`}
+                              >
+                                {size}
+                              </button>
+                            );
+                          })}
+                        </div>
+
+                        {/* Price right to size */}
+                        <div className="text-right">
+                          <span className="text-[#F25C05] font-extrabold text-sm sm:text-base font-mono tracking-tight whitespace-nowrap">
+                            Tk. {item.price?.toLocaleString()}
+                          </span>
+                        </div>
                       </div>
+
                       <p className="text-[10px] sm:text-[11px] text-neutral-400 mt-2 font-light tracking-wide">
                         European standard sizing
                       </p>
@@ -437,13 +478,21 @@ export const EditorialPickSection: React.FC<EditorialPickSectionProps> = ({
                   {/* Order Button */}
                   <button
                     type="button"
+                    disabled={orderingItemId === item.id}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleOrderNow(item, currentSize);
                     }}
-                    className="w-full bg-[#F25C05] hover:bg-[#ff6910] active:scale-[0.98] text-white font-extrabold text-[11px] sm:text-xs tracking-[0.1em] uppercase py-3 px-3 transition-all duration-200 cursor-pointer shadow-md text-center mt-2"
+                    className="w-full bg-[#F25C05] hover:bg-[#ff6910] active:scale-[0.98] disabled:opacity-75 disabled:cursor-wait text-white font-extrabold text-[11px] sm:text-xs tracking-[0.1em] uppercase py-3 px-3 transition-all duration-200 cursor-pointer shadow-md text-center mt-2 flex items-center justify-center gap-2"
                   >
-                    ORDER NOW TO SEIZE YOUR NEXT HUNT
+                    {orderingItemId === item.id ? (
+                      <>
+                        <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                        <span>PROCEEDING...</span>
+                      </>
+                    ) : (
+                      <span>ORDER NOW TO SEIZE YOUR NEXT HUNT</span>
+                    )}
                   </button>
                 </div>
               </div>

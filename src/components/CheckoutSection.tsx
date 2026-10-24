@@ -107,6 +107,7 @@ export const CheckoutSection: React.FC<CheckoutSectionProps> = ({
 
   // Place order directly with basic customer contact info
   const handlePlaceOrder = () => {
+    if (isProcessing) return;
     setFormError(null);
 
     const availableProducts = storeService.getProducts();
