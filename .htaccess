@@ -10,13 +10,8 @@
     RewriteBase /
 
     # Route API storage, products, orders, and customer requests directly to product_storage_handler.php
-    RewriteRule ^api/storage/(.*)$ product_storage_handler.php?endpoint=$1 [L,QSA]
-    RewriteRule ^api/products/(.*)$ product_storage_handler.php?endpoint=products&id=$1 [L,QSA]
-    RewriteRule ^api/products$ product_storage_handler.php?endpoint=products [L,QSA]
-    RewriteRule ^api/orders/(.*)$ product_storage_handler.php?endpoint=orders&id=$1 [L,QSA]
-    RewriteRule ^api/orders$ product_storage_handler.php?endpoint=orders [L,QSA]
-    RewriteRule ^api/customers/(.*)$ product_storage_handler.php?endpoint=customers&id=$1 [L,QSA]
-    RewriteRule ^api/customers$ product_storage_handler.php?endpoint=customers [L,QSA]
+    RewriteRule ^api/(.*)$ product_storage_handler.php?endpoint=$1 [L,QSA]
+    RewriteRule ^api$ product_storage_handler.php [L,QSA]
 
     # Handle React / SPA front-end routing if frontend files are also hosted on Apache
     RewriteCond %{REQUEST_FILENAME} !-f
